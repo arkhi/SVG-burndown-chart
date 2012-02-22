@@ -1,0 +1,150 @@
+svg {
+  font-family: Verdana;
+  font-size: 12px;
+  fill: #666;
+  stroke: none;
+}
+
+
+
+
+
+
+
+
+
+
+/*******************************************************************************
+ =grid
+*******************************************************************************/
+#grid circle,
+#grid line {
+  fill: #ddd;
+  stroke: #ddd;
+}
+#legends text {
+  font-weight: bold;
+  text-anchor: end;
+}
+
+
+
+
+
+
+
+
+
+
+/*******************************************************************************
+ =chart-us
+*******************************************************************************/
+#chart-us {
+  stroke: #069;
+  stroke-width: 2px;
+  fill: #069;
+  font-weight: bolder;
+}
+  #chart-us text {
+    fill: #069;
+    stroke: none;
+  }
+  #chart-us circle {
+    fill: #fff;
+  }
+
+
+
+
+
+
+
+
+
+
+/*******************************************************************************
+ =chart-tasks
+*******************************************************************************/
+#chart-tasks {
+  fill: #900;
+  stroke: #900;
+  text-anchor: end;
+  font-weight: bolder;
+}
+  #chart-tasks text {
+    fill: #900;
+    stroke: none;
+    dominant-baseline: hanging;
+  }
+  #chart-tasks text.pointsBurned {
+    fill: #090;
+    text-anchor: start;
+    dominant-baseline: auto;
+  }
+  #chart-tasks circle,
+  #chart-tasks line {
+    stroke-width: 3;
+  }
+  #chart-tasks circle {
+    fill: #fff;
+  }
+
+
+
+
+
+
+
+
+
+
+/*******************************************************************************
+ =chart-deviation
+*******************************************************************************/
+#chart-deviation {
+  text-anchor: start;
+  font-weight: bolder;
+}
+  #chart-deviation text {
+    fill: #333;
+    stroke: none;
+    dominant-baseline: hanging;
+  }
+/*
+  #chart-deviation circle,
+  #chart-tasks line {
+    stroke-width: 3;
+  }
+*/
+  #chart-deviation circle {
+    stroke: #333;
+  }
+
+
+
+
+
+
+
+
+
+
+/*******************************************************************************
+ =chart-projection
+*******************************************************************************/
+#chart-projection {
+  text-anchor: start;
+  font-weight: bolder;
+}
+  #chart-projection text {
+    fill: #ccc;
+    stroke: none;
+    dominant-baseline: hanging;
+  }
+  #chart-projection line {
+    stroke: #ccc;
+  }
+  #chart-projection circle {
+    fill: #ccc;
+    stroke: #ccc;
+  }
