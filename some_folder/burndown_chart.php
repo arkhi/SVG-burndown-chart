@@ -1,4 +1,8 @@
 <?php
+  /* NOTES:
+   * units have been changed from percents to pixels
+   */
+
   /* TODO
    * Sylvain: add a red arrow showing the deadline
    */
@@ -27,10 +31,10 @@
                             )
   );
 
-  $graphPercent = 80;
-  $GraphMargin  = (100 - $graphPercent) / 2;
-  $withPoints   = $graphPercent / $sprint['points'];
-  $widthDay     = $graphPercent / $sprint['days'];
+  $graphWidth     = 1000;
+  $GraphMargin    = 50;
+  $withPoints     = $graphWidth / $sprint['points'];
+  $widthDay       = $graphWidth / $sprint['days'];
   $coordsModifier = $sprint['points'] - $sprint['USPoints']; /* to adapt the number of US points to the scale of tasks points */
 ?>
 
@@ -44,44 +48,44 @@
     </filter>
   </defs>
 
-  <g id="grid">
+  <g id="grid" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
 <?php for ($i = 0; $i < $sprint['points']; $i += 10) : /* horizontal lines: points */ ?>
-    <line x1="<?= $GraphMargin; ?>%" y1="<?= $graphPercent + $GraphMargin - $i * $withPoints; ?>%" x2="<?= $graphPercent + $GraphMargin; ?>%" y2="<?= $graphPercent + $GraphMargin - $i * $withPoints; ?>%" stroke-dasharray="5,5" />
-    <text x="<?= $GraphMargin -.5; ?>%" y="<?= $graphPercent + $GraphMargin - $i * $withPoints; ?>%" text-anchor="end" dominant-baseline="middle"><?= $i; ?></text>
+    <line x1="<?= $GraphMargin; ?>" y1="<?= $graphWidth - $i * $withPoints; ?>" x2="<?= $graphWidth; ?>" y2="<?= $graphWidth + $GraphMargin - $i * $withPoints; ?>" stroke-dasharray="5,5" />
+    <text x="<?= $GraphMargin -.5; ?>" y="<?= $graphWidth - $i * $withPoints; ?>" text-anchor="end" dominant-baseline="middle"><?= $i; ?></text>
 <? endfor; ?>
 
 <?php for ($i = 0; $i < $sprint['days']; $i += 5) : /* vertical lines: days */ ?>
-    <line x1="<?= $graphPercent + $GraphMargin - $i * $widthDay; ?>%" y1="<?= $GraphMargin; ?>%" x2="<?= $graphPercent + $GraphMargin - $i * $widthDay; ?>%" y2="<?= $graphPercent + $GraphMargin; ?>%" />
+    <line x1="<?= $graphWidth + $GraphMargin - $i * $widthDay; ?>" y1="<?= $GraphMargin; ?>" x2="<?= $graphWidth + $GraphMargin - $i * $widthDay; ?>" y2="<?= $graphWidth + $GraphMargin; ?>" />
   <?php if($i != 0) : ?>
-    <text x="<?= $GraphMargin + $i * $widthDay; ?>%" y="<?= $graphPercent + $GraphMargin + .5; ?>%" text-anchor="middle" dominant-baseline="hanging">day <?= $i; ?></text>
+    <text x="<?= $GraphMargin + $i * $widthDay; ?>" y="<?= $graphWidth + $GraphMargin + .5; ?>" text-anchor="middle" dominant-baseline="hanging">day <?= $i; ?></text>
   <? endif; ?>
 <? endfor; ?>
 
     <!-- ideal line -->
-    <line x1="<?= $GraphMargin; ?>%" y1="<?= $GraphMargin; ?>%" x2="<?= $GraphMargin + $graphPercent; ?>%" y2="<?= $GraphMargin + $graphPercent; ?>%" stroke="#eee" />
+    <line x1="<?= $GraphMargin; ?>" y1="<?= $GraphMargin; ?>" x2="<?= $GraphMargin + $graphWidth; ?>" y2="<?= $GraphMargin + $graphWidth; ?>" stroke="#eee" />
 
 <?php for ($i = 0; $i <= $sprint['days']; $i++) : /* ideal tasks remaining: dots */ ?>
-    <circle cx="<?= $GraphMargin + $i * $widthDay; ?>%" cy="<?= $GraphMargin + $i * $widthDay; ?>%" r="5" />
+    <circle cx="<?= $GraphMargin + $i * $widthDay; ?>" cy="<?= $GraphMargin + $i * $widthDay; ?>" r="5" />
 <? endfor; ?>
 
     <!-- frame -->
-    <rect x="<?= $GraphMargin; ?>%" y="<?= $GraphMargin; ?>%" width="<?= $graphPercent; ?>%" height="<?= $graphPercent; ?>%" fill="none" stroke="#000" />
+    <rect x="<?= $GraphMargin; ?>" y="<?= $GraphMargin; ?>" width="<?= $graphWidth; ?>" height="<?= $graphWidth; ?>" fill="none" stroke="#000" />
   </g><!-- /#grid -->
 
   <!-- That's our goal -->
-  <circle cx="<?= 100 - $GraphMargin; ?>%" cy="<?= 100 - $GraphMargin; ?>%" r="5" fill="#090" stroke="#000" />
+  <circle cx="<?= 100 - $GraphMargin; ?>" cy="<?= 100 - $GraphMargin; ?>" r="5" fill="#090" stroke="#000" />
 
 
 
-  <g id="legends">
-    <text x="<?= $GraphMargin - 3; ?>%" y="<?= $GraphMargin - .5; ?>%" fill="#900">Tasks</text>
-    <text x="<?= $GraphMargin - .5; ?>%" y="<?= $GraphMargin - .5; ?>%" fill="#900"><?= $sprint['points']; ?></text>
-    <text x="<?= $GraphMargin - 3; ?>%" y="<?= $coordsModifier * $withPoints + $GraphMargin; ?>%" fill="#069">User Story</text>
+  <g id="legends" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
+    <text x="<?= $GraphMargin - 3; ?>" y="<?= $GraphMargin - .5; ?>" fill="#900">Tasks</text>
+    <text x="<?= $GraphMargin - .5; ?>" y="<?= $GraphMargin - .5; ?>" fill="#900"><?= $sprint['points']; ?></text>
+    <text x="<?= $GraphMargin - 3; ?>" y="<?= $coordsModifier * $withPoints + $GraphMargin; ?>" fill="#069">User Story</text>
   </g><!-- /#legends -->
 
 
 
-  <g id="chart-us">
+  <g id="chart-us" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
 <?php for ($i = 0, $burnedPoints = 0; $i < count($sprint['dailyUSPoints']); $i++) : /* user stories */ ?>
   <?php
     $previousX      = ($i-1) * $widthDay + $widthDay + $GraphMargin;
@@ -90,7 +94,7 @@
     $x              = $i * $widthDay + $widthDay + $GraphMargin;
     $y              = ($burnedPoints + $coordsModifier) * $withPoints + $GraphMargin;
   ?>
-    <line x1="<?= $previousX; ?>%" y1="<?= $previousY; ?>%" x2="<?= $x; ?>%" y2="<?= $y; ?>%" />
+    <line x1="<?= $previousX; ?>" y1="<?= $previousY; ?>" x2="<?= $x; ?>" y2="<?= $y; ?>" />
 <? endfor; ?>
 <?php for ($i = 0, $burnedPoints = 0; $i < count($sprint['dailyUSPoints']); $i++) : /* user stories */ ?>
   <?php
@@ -100,17 +104,17 @@
     $x              = $i * $widthDay + $widthDay + $GraphMargin;
     $y              = ($burnedPoints + $coordsModifier) * $withPoints + $GraphMargin;
   ?>
-    <circle cx="<?= $x; ?>%" cy="<?= $y; ?>%" r="5" />
-    <text x="<?= $x + .5; ?>%" y="<?= $y - .5; ?>%"><?= $sprint['USPoints'] - $burnedPoints; ?></text>
+    <circle cx="<?= $x; ?>" cy="<?= $y; ?>" r="5" />
+    <text x="<?= $x + .5; ?>" y="<?= $y - .5; ?>"><?= $sprint['USPoints'] - $burnedPoints; ?></text>
 <? endfor; ?>
 
-    <circle cx="<?= $GraphMargin; ?>%" cy="<?= $coordsModifier * $withPoints + $GraphMargin; ?>%" r="5" />
-    <text x="<?= $GraphMargin + .5; ?>%" y="<?= $coordsModifier * $withPoints + $GraphMargin -.5; ?>%" fill="#069"><?= $sprint['USPoints']; ?></text>
+    <circle cx="<?= $GraphMargin; ?>" cy="<?= $coordsModifier * $withPoints + $GraphMargin; ?>" r="5" />
+    <text x="<?= $GraphMargin + .5; ?>" y="<?= $coordsModifier * $withPoints + $GraphMargin -.5; ?>" fill="#069"><?= $sprint['USPoints']; ?></text>
   </g><!-- /#chart-us -->
 
 
 
-  <g id="chart-tasks">
+  <g id="chart-tasks" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
 <?php for ($i = 0, $burnedPoints = 0; $i < count($sprint['dailyPoints']); $i++) : /* tasks */ ?>
   <?php
     $previousX    = ($i-1) * $widthDay + $widthDay + $GraphMargin;
@@ -119,7 +123,7 @@
     $x            = $i * $widthDay + $widthDay + $GraphMargin;
     $y            = $burnedPoints * $withPoints + $GraphMargin;
   ?>
-    <line id="day<?= $i ?>" x1="<?= $previousX; ?>%" y1="<?= $previousY; ?>%" x2="<?= $x; ?>%" y2="<?= $y; ?>%" />
+    <line id="day<?= $i ?>" x1="<?= $previousX; ?>" y1="<?= $previousY; ?>" x2="<?= $x; ?>" y2="<?= $y; ?>" />
 
 <? endfor; ?>
 <?php for ($i = 0, $burnedPoints = 0; $i < count($sprint['dailyPoints']); $i++) : /* tasks */ ?>
@@ -130,13 +134,13 @@
     $x            = $i * $widthDay + $widthDay + $GraphMargin;
     $y            = $burnedPoints * $withPoints + $GraphMargin;
   ?>
-    <circle id="point<?= $i ?>" cx="<?= $x; ?>%" cy="<?= $y; ?>%" r="5" />
-    <text x="<?= $x - .5; ?>%" y="<?= $y + .5; ?>%"><?= $sprint['points'] - $burnedPoints; ?></text>
+    <circle id="point<?= $i ?>" cx="<?= $x; ?>" cy="<?= $y; ?>" r="5" />
+    <text x="<?= $x - .5; ?>" y="<?= $y + .5; ?>"><?= $sprint['points'] - $burnedPoints; ?></text>
 
 
 
 
-    <text class="pointsBurned" x="<?= $previousX + .5; ?>%" y="<?= $previousY - .5; ?>%" opacity="0">
+    <text class="pointsBurned" x="<?= $previousX + .5; ?>" y="<?= $previousY - .5; ?>" opacity="0">
 <!--
       <animate attributeName="opacity" to="1" dur="0.25" begin="day<?= $i ?>.mouseover;point<?= $i-1 ?>.mouseover" fill="freeze" />
       <animate attributeName="opacity" to="0" dur="0.25" begin="day<?= $i ?>.mouseout;point<?= $i-1 ?>.mouseout" fill="freeze" />
@@ -148,7 +152,7 @@
     </text>
 <? endfor; ?>
 
-    <circle cx="<?= $GraphMargin; ?>%" cy="<?= $GraphMargin; ?>%" r="5" />
+    <circle cx="<?= $GraphMargin; ?>" cy="<?= $GraphMargin; ?>" r="5" />
   </g><!-- /#chart-tasks -->
 
 
@@ -208,25 +212,25 @@
   $blink          = round($goalDeviation*100) == 0 ? '' : '<animate attributeName="fill" values="#'.$deviationColor.';#f00;#'.$deviationColor.'" dur="1" repeatCount="indefinite" />';
 
 ?>
-  <g id="chart-deviation" fill="#<?= $deviationColor; ?>" stroke="#<?= $deviationColor; ?>">
+  <g id="chart-deviation" fill="#<?= $deviationColor; ?>" stroke="#<?= $deviationColor; ?>" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
     <line
-      x1="<?= $GraphMargin; ?>%" y1="<?= $GraphMargin; ?>%"
-      x2="<?= $deviationX; ?>%" y2="<?= $deviationY; ?>%"
+      x1="<?= $GraphMargin; ?>" y1="<?= $GraphMargin; ?>"
+      x2="<?= $deviationX; ?>" y2="<?= $deviationY; ?>"
       stroke-dasharray="50,10,10,10" stroke-width="2" />
-    <circle cx="<?= $deviationX; ?>%" cy="<?= $deviationY; ?>%" r="<?= 5 * pow($goalDeviation+1, 3); ?>">
+    <circle cx="<?= $deviationX; ?>" cy="<?= $deviationY; ?>" r="<?= 5 * pow($goalDeviation+1, 3); ?>">
       <?= $blink; ?>
     </circle>
-    <text x="<?= $deviationX + .5; ?>%" y="<?= $deviationY + 1.5 + pow($goalDeviation+.5, 3); ?>%"><?= $pointsLeft; ?></text>
+    <text x="<?= $deviationX + .5; ?>" y="<?= $deviationY + 1.5 + pow($goalDeviation+.5, 3); ?>"><?= $pointsLeft; ?></text>
   </g>
 
-  <g id="chart-projection">
+  <g id="chart-projection" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
     <line
-      x1="<?= $x; ?>%" y1="<?= $y; ?>%"
-      x2="<?= $projectionX; ?>%" y2="<?= $projectionY; ?>%"
+      x1="<?= $x; ?>" y1="<?= $y; ?>"
+      x2="<?= $projectionX; ?>" y2="<?= $projectionY; ?>"
       stroke-dasharray="50,10,10,10" stroke-width="2" />
-    <circle cx="<?= $projectionX; ?>%" cy="<?= $projectionY; ?>%" r="<?= 5 * pow($goalProjection+1, 3); ?>">
+    <circle cx="<?= $projectionX; ?>" cy="<?= $projectionY; ?>" r="<?= 5 * pow($goalProjection+1, 3); ?>">
     </circle>
-    <text x="<?= $projectionX + .5; ?>%" y="<?= $projectionY + 1.5 + pow($goalProjection+.5, 3); ?>%"><?= $pointsLeftProj; ?></text>
+    <text x="<?= $projectionX + .5; ?>" y="<?= $projectionY + 1.5 + pow($goalProjection+.5, 3); ?>"><?= $pointsLeftProj; ?></text>
   </g>
 
   <script type="text/javascript">
