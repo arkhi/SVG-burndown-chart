@@ -99,13 +99,13 @@ svg {
 
 
 /*******************************************************************************
- =chart-deviation
+ =chart-global
 *******************************************************************************/
-#chart-deviation {
+#chart-global {
   text-anchor: start;
   font-weight: bolder;
 }
-  #chart-deviation text {
+  #chart-global text {
     fill: #333;
     stroke: none;
     dominant-baseline: hanging;
@@ -116,7 +116,7 @@ svg {
     stroke-width: 3;
   }
 */
-  #chart-deviation circle {
+  #chart-global circle {
     stroke: #333;
   }
 
@@ -130,21 +130,21 @@ svg {
 
 
 /*******************************************************************************
- =chart-projection
+ =chart-local
 *******************************************************************************/
-#chart-projection {
+#chart-local {
   text-anchor: start;
   font-weight: bolder;
 }
-  #chart-projection text {
+  #chart-local text {
     fill: #ccc;
     stroke: none;
     dominant-baseline: hanging;
   }
-  #chart-projection line {
+  #chart-local line {
     stroke: #ccc;
   }
-  #chart-projection circle {
+  #chart-local circle {
     fill: #ccc;
     stroke: #ccc;
   }
