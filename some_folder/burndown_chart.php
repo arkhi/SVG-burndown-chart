@@ -1,11 +1,16 @@
-<?php
-  /* TODO
-   * Sylvain: add a red arrow showing the deadline
-   */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Burndown chart</title>
 
-  header("Content-type: image/svg+xml");
-  echo '<?xml version="1.0" encoding="utf-8"?>
-  <?xml-stylesheet href="../common.css" type="text/css"?>';
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+  <link rel="stylesheet" href="../common.css" />
+</head>
+
+<body>
+<?php
 
   $variation = isset($_GET['var']) ? $_GET['var'] : 11;
 
@@ -27,13 +32,17 @@
 
   $graphWidth     = 2000;
   $graphHeight    = 1000;
-  $GraphMargin    = 50;
+  $GraphMargin    = 150;
   $unitPoint      = $graphHeight / $sprint['points'];
   $unitDay        = $graphWidth / $sprint['days'];
   $coordsModifier = $sprint['points'] - $sprint['USPoints']; /* to adapt the number of US points to the scale of tasks points */
 ?>
 
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg  version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      preserveAspectRatio="xMidYMid meet"
+      viewBox="0 0 <?= $graphWidth + 2 * $GraphMargin; ?> <?= $graphHeight + 2 * $GraphMargin; ?>"
   <title>burndown chart - sprint <?= $sprint['number']; ?></title>
 
   <defs>
@@ -73,8 +82,9 @@
 
 
   <g id="legends" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
-    <text x="12" y="<?= $graphHeight - 58; ?>" fill="#999">Sprint <?= $sprint['number']; ?></text>
-    <text x="12" y="<?= $graphHeight - 35; ?>" fill="#900">Tasks: <?= $sprint['points']; ?></text>
+    <text x="-12" y="0" fill="#900" text-anchor="end"><?= $sprint['points']; ?></text>
+    <text x="12" y="<?= $graphHeight - 88; ?>" fill="#999">Sprint <?= $sprint['number']; ?></text>
+    <text x="12" y="<?= $graphHeight - 50; ?>" fill="#900">Tasks: <?= $sprint['points']; ?></text>
     <text x="12" y="<?= $graphHeight - 12; ?>" fill="#069">User Story: <?= $sprint['USPoints'] ?></text>
   </g><!-- /#legends -->
 
@@ -244,3 +254,5 @@
     );
   </script>
 </svg>
+</body>
+</html>
