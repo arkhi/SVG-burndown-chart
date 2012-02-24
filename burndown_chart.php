@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Burndown chart</title>
+  <title>Burndown chart in SVG</title>
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-  <link rel="stylesheet" href="../common.css" />
+  <link rel="stylesheet" href="common.css" />
 </head>
 
 <body>
