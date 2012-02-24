@@ -1,15 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>Burndown chart in SVG</title>
-
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
-  <link rel="stylesheet" href="common.css" />
-</head>
-
-<body>
 <?php
 
   $variation = isset($_GET['var']) ? $_GET['var'] : 11;
@@ -254,5 +242,3 @@
     );
   </script>
 </svg>
-</body>
-</html>
