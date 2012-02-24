@@ -24,7 +24,7 @@ svg {
 }
 #legends text {
   font-weight: bold;
-  text-anchor: end;
+  text-anchor: start;
 }
 
 
