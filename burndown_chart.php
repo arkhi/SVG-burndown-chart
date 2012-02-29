@@ -1,10 +1,16 @@
 <?php
-/* you don't want that when you embed the file direclty in the HTML
+/* You don't want that when you embed the file direclty in the HTML.
+   The 3 following lines should be commented when the files is direclty embedded in a HTML5 document.
+   On the contrary, the 3 following lines shouldn't be commented if this php file is used as a standalone
+   Just add [starSlash] caracters at the end of this line.
   header("Content-type: image/svg+xml");
   echo '<?xml version="1.0" encoding="utf-8"?>
   <?xml-stylesheet href="common.css" type="text/css"?>';
 /**/
 
+  /*
+   * $variation can be used to experiment and test through the URL.
+   */
   $variation = isset($_GET['var']) ? $_GET['var'] : 11;
 
   /*
@@ -226,9 +232,8 @@
       x1="<?= $x; ?>" y1="<?= $y; ?>"
       x2="<?= $localX; ?>" y2="<?= $localY; ?>"
       stroke-dasharray="50,10,10,10" stroke-width="2" />
-    <circle cx="<?= $localX; ?>" cy="<?= $localY; ?>" r="<?= 5 * pow($goalProjection+1, 3); ?>">
-    </circle>
-    <text x="<?= $localX + 12; ?>" y="<?= $localY + 12 + pow($goalProjection + .5, 3); ?>"><?= $localDiffLegend; ?></text>
+    <circle cx="<?= $localX; ?>" cy="<?= $localY; ?>" r="5" />
+    <text x="<?= $localX + 12; ?>" y="<?= $localY + 12; ?>"><?= $localDiffLegend; ?></text>
   </g>
 
   <script type="text/javascript">
