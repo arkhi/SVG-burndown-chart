@@ -56,7 +56,7 @@
     <marker id="markerTasks"
       viewBox="0 0 14 14"
       refX="7" refY="7"
-      markerWidth="5" markerHeight="5"
+      markerWidth="4" markerHeight="4"
       orient="auto">
       <circle cx="7" cy="7" r="5" fill="#fff" stroke="#900" stroke-width="2" />
     </marker>
@@ -151,7 +151,7 @@
     </text>
 <? endfor; ?>
 
-    <polyline fill="none" stroke="#900" stroke-width="3"
+    <polyline fill="none" stroke="#900"
               points="0,0 <?= implode(' ', $arrayTasksCoords); ?>"
               marker-start="url(#markerTasks)"
               marker-mid="url(#markerTasks)"
@@ -210,7 +210,7 @@
     $globalDiffLegend = $globalDiff < 0 ? '% left' : '% more';
     $localDiffLegend  = $localDiff < 0 ? '% left' : '% more';
     $globalDiffLegend = $globalDiffRound.$globalDiffLegend;
-    $localDiffLegend = $globalDiffRound.$localDiffLegend;
+    $localDiffLegend = $localDiffRound.$localDiffLegend;
   }
 
   $blink  = $globalDiffAbs == 0 ? '' : '<animate attributeName="fill" values="#'.$globalColor.';#f00;#'.$globalColor.'" dur="1" repeatCount="indefinite" />';
