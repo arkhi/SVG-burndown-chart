@@ -54,18 +54,16 @@
       <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
     </filter>
     <marker id="markerTasks"
-      viewBox="0 0 14 14"
-      refX="7" refY="7"
+      viewBox="-7 -7 14 14"
       markerWidth="4" markerHeight="4"
       orient="auto">
-      <circle cx="7" cy="7" r="5" fill="#fff" stroke="#900" stroke-width="2" />
+      <circle cx="0" cy="0" r="5" fill="#fff" stroke="#900" stroke-width="2" />
     </marker>
     <marker id="markerUS"
-      viewBox="0 0 14 14"
-      refX="7" refY="7"
+      viewBox="-7 -7 14 14"
       markerWidth="5" markerHeight="5"
       orient="auto">
-      <circle cx="7" cy="7" r="5" fill="#fff" stroke="#069" stroke-width="2" />
+      <circle cx="0" cy="0" r="5" fill="#fff" stroke="#069" stroke-width="2" />
     </marker>
   </defs>
 
