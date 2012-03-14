@@ -297,6 +297,13 @@ class BurndownChart
     $this->addJavascript($globalColor, $globalRed, $globalGreen, $globalX, $globalY, $globalSlope, $globalDiff, $localX, $localY, $localSlope, $localDiff);
   }
   
+  private function buildPolyLine($markerId, $unitPoint, $coordsModifier, $coordinateArray)
+  {
+    $polyLine =  '<polyline fill="none" stroke="#069" stroke-width="3"';
+    $polyLine .= 'points="0, '.($coordsModifier * $unitPoint).' '.implode(' ', $coordinateArray).'"';
+    $polyLine .= 'marker-start="url(#'.$markerId.')" marker-mid="url(#'.$markerId.')" marker-start="url(#'.$markerId.')" />';
+  }
+  
   private function chartGlobalEstimation($globalColor, $globalX, $globalY, $blink, $globalDiffRound, $globalDiffLegend)
   {
       $gridOptions = array('fill' => '#'.$globalColor, 'stroke' => '#'.$globalColor, 'transform' => 'translate('.self::_GMARGIN.','.self::_GMARGIN.')');
