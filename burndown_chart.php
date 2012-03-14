@@ -1,10 +1,16 @@
 <?php
-/* you don't want that when you embed the file direclty in the HTML
+/* You don't want that when you embed the file direclty in the HTML.
+   The 3 following lines should be commented when the files is direclty embedded in a HTML5 document.
+   On the contrary, the 3 following lines shouldn't be commented if this php file is used as a standalone
+   Just add [starSlash] caracters at the end of this line.
   header("Content-type: image/svg+xml");
   echo '<?xml version="1.0" encoding="utf-8"?>
   <?xml-stylesheet href="common.css" type="text/css"?>';
 /**/
 
+  /*
+   * $variation can be used to experiment and test through the URL.
+   */
   $variation = isset($_GET['var']) ? $_GET['var'] : 11;
 
   /*
@@ -48,18 +54,16 @@
       <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
     </filter>
     <marker id="markerTasks"
-      viewBox="0 0 14 14"
-      refX="7" refY="7"
-      markerWidth="5" markerHeight="5"
+      viewBox="-7 -7 14 14"
+      markerWidth="4" markerHeight="4"
       orient="auto">
-      <circle cx="7" cy="7" r="5" fill="#fff" stroke="#900" stroke-width="2" />
+      <circle cx="0" cy="0" r="5" fill="#fff" stroke="#900" stroke-width="2" />
     </marker>
     <marker id="markerUS"
-      viewBox="0 0 14 14"
-      refX="7" refY="7"
+      viewBox="-7 -7 14 14"
       markerWidth="5" markerHeight="5"
       orient="auto">
-      <circle cx="7" cy="7" r="5" fill="#fff" stroke="#069" stroke-width="2" />
+      <circle cx="0" cy="0" r="5" fill="#fff" stroke="#069" stroke-width="2" />
     </marker>
   </defs>
 
@@ -145,7 +149,7 @@
     </text>
 <? endfor; ?>
 
-    <polyline fill="none" stroke="#900" stroke-width="3"
+    <polyline fill="none" stroke="#900"
               points="0,0 <?= implode(' ', $arrayTasksCoords); ?>"
               marker-start="url(#markerTasks)"
               marker-mid="url(#markerTasks)"
@@ -204,7 +208,7 @@
     $globalDiffLegend = $globalDiff < 0 ? '% left' : '% more';
     $localDiffLegend  = $localDiff < 0 ? '% left' : '% more';
     $globalDiffLegend = $globalDiffRound.$globalDiffLegend;
-    $localDiffLegend = $globalDiffRound.$localDiffLegend;
+    $localDiffLegend = $localDiffRound.$localDiffLegend;
   }
 
   $blink  = $globalDiffAbs == 0 ? '' : '<animate attributeName="fill" values="#'.$globalColor.';#f00;#'.$globalColor.'" dur="1" repeatCount="indefinite" />';
@@ -226,9 +230,8 @@
       x1="<?= $x; ?>" y1="<?= $y; ?>"
       x2="<?= $localX; ?>" y2="<?= $localY; ?>"
       stroke-dasharray="50,10,10,10" stroke-width="2" />
-    <circle cx="<?= $localX; ?>" cy="<?= $localY; ?>" r="<?= 5 * pow($goalProjection+1, 3); ?>">
-    </circle>
-    <text x="<?= $localX + 12; ?>" y="<?= $localY + 12 + pow($goalProjection + .5, 3); ?>"><?= $localDiffLegend; ?></text>
+    <circle cx="<?= $localX; ?>" cy="<?= $localY; ?>" r="5" />
+    <text x="<?= $localX + 12; ?>" y="<?= $localY + 12; ?>"><?= $localDiffLegend; ?></text>
   </g>
 
   <script type="text/javascript">

@@ -85,9 +85,10 @@ svg {
     text-anchor: start;
     dominant-baseline: auto;
   }
+  #chart-tasks polyline,
   #chart-tasks circle,
   #chart-tasks line {
-    stroke-width: 3;
+    stroke-width: 4;
   }
 
 
