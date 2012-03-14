@@ -32,7 +32,7 @@ class BurndownChart
   {
     $this->getData($view);
     $this->initializeGraph();
-    $this->addTitleToGraph();
+    $this->addGraphTitle();
     $this->addGraphDefinitions();
     $this->addLegendsGrid();
     $this->chartStoryPoints();
@@ -44,8 +44,8 @@ class BurndownChart
   
   private function initializeGraph()
   {
-    $width = _GWIDTH + 2 * _GMARGIN;
-    $height = _GHEIGHT + 2 * _GMARGIN;
+    $width = self::_GWIDTH + 2 * self::_GMARGIN;
+    $height = self::_GHEIGHT + 2 * self::_GMARGIN;
     $this->graphCode .= '<svg  version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
           preserveAspectRatio="xMidYMid meet"
           viewBox="0 0'.$width.' '.$height.'"';
@@ -58,7 +58,7 @@ class BurndownChart
   
   private function addGraphDefinitions()
   {
-    $this-graphCode .= '<defs>
+    $this->graphCode .= '<defs>
       <!-- filters -->
       <filter id="dropShadow">
         <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
@@ -82,29 +82,29 @@ class BurndownChart
   
   private function addBaseGraphGrid()
   {
-    $gridOptions = array( 'transform' => 'translate('._GMARGIN.','._GMARGIN.')');
+    $gridOptions = array( 'transform' => 'translate('.self::_GMARGIN.','.self::_GMARGIN.')');
     $baseGrid = $this->openGridTag('grid', $gridOptions);
     //horizontal lines: based on estimated hours
     for($i = 0; $i < $this->sprint_data['hours_estimate']; $i += 10)
     {
-      $lineY = _GHEIGHT - $i * (_GHEIGHT / $this->sprint_data['hours_estimate']);
-      $lineX = _GWIDTH;
+      $lineY = self::_GHEIGHT - $i * (self::_GHEIGHT / $this->sprint_data['hours_estimate']);
+      $lineX = self::_GWIDTH;
       $lineOptions = array('stroke-dasharray' => '5,5');
       $baseGrid .= $this->getLineTag(0, $lineY, $lineX, $lineY, $lineOptions);
       $textOptions = array('text-anchor' => 'end', 'dominant-baseline' =>'middle');
       $baseGrid .= $this->getTextTag($i, -12, $lineY, $textOptions);
     }
     //vertical lines: based on days in sprint
-    for($i = 0; $i < $this->sprint_data['days']; $i++)
+    for($i = 0; $i < $this->sprint_data['length']; $i++)
     {
-      $lineX = _GWIDTH - $i * (_GWIDTH / $this->sprint_data['days']);
-      $lineY = _GHEIGHT;
+      $lineX = self::_GWIDTH - $i * (self::_GWIDTH / $this->sprint_data['length']);
+      $lineY = self::_GHEIGHT;
       $lineOptions = array('stroke-dasharray' => '5,5');
       $baseGrid .= $this->getLineTag($lineX, 0, $lineX, $lineY, $lineOptions);
       if($i != 0)
       {
           $text = 'day '.$i;
-          $textX = $i * (_GWIDTH / $this->sprint_data['days']);
+          $textX = $i * (self::_GWIDTH / $this->sprint_data['length']);
           $textOptions = array('text-anchor' => 'middle');
           $baseGrid .= $this->getTextTag($text, $textX, -12, $textOptions);
       }
@@ -114,7 +114,7 @@ class BurndownChart
     
     //build the frame
     $rectOptions = array('fill' => 'none', 'stroke' => '#000' );
-    $baseGrid .= $this->getRectangleTag(0, 0, _GWIDTH, _GHEIGHT, $rectOptions);
+    $baseGrid .= $this->getRectangleTag(0, 0, self::_GWIDTH, self::_GHEIGHT, $rectOptions);
     
     $baseGrid .= '</g>';
     
@@ -124,20 +124,20 @@ class BurndownChart
   
   private function addGoalPoint()
   {
-    $circOptions = array('fill' => '#090', 'stroke' => '#000', 'transform' => 'translate('._GMARGIN.', '._GMARGIN.')');
-    $goalPoint = $this->addCircleTag(_GWIDTH, _GHEIGHT, 5, $circOptions);
+    $circOptions = array('fill' => '#090', 'stroke' => '#000', 'transform' => 'translate('.self::_GMARGIN.', '.self::_GMARGIN.')');
+    $goalPoint = $this->addCircleTag(self::_GWIDTH, self::_GHEIGHT, 5, $circOptions);
     
     return $goalPoint;
   }
   
   private function addLegendsGrid()
   {
-     $gridOptions = array( 'transform' => 'translate('._GMARGIN.','._GMARGIN.')');
+     $gridOptions = array( 'transform' => 'translate('.self::_GMARGIN.','.self::_GMARGIN.')');
      $legendsGrid = $this->openGridTag('legends', $gridOptions);
      $legendsGrid .= $this->getTextTag($this->sprint_data['hours_estimate'], -12, 0, array('fill'=>'#900', 'text-anchor' => 'end'));
-     $legendsGrid .= $this->getTextTag('Sprint'.$this->sprint_data['sprint_id'], 12, (_GHEIGHT - 88), array('fill'=>'#999'));
-     $legendsGrid .= $this->getTextTag('Hours'.$this->sprint_data['hours_estimate'], 12, (_GHEIGHT - 50), array('fill'=>'#900'));
-     $legendsGrid .= $this->getTextTag('Points'.$this->sprint_data['points_esitmate'], 12, (_GHEIGHT - 12), array('fill'=>'#069'));
+     $legendsGrid .= $this->getTextTag('Sprint'.$this->sprint_data['sprint_id'], 12, (self::_GHEIGHT - 88), array('fill'=>'#999'));
+     $legendsGrid .= $this->getTextTag('Hours'.$this->sprint_data['hours_estimate'], 12, (self::_GHEIGHT - 50), array('fill'=>'#900'));
+     $legendsGrid .= $this->getTextTag('Points'.$this->sprint_data['points_esitmate'], 12, (self::_GHEIGHT - 12), array('fill'=>'#069'));
      $legendsGrid .= '</g>';
      
       $this->graphCode .= $legendsGrid;
@@ -145,10 +145,10 @@ class BurndownChart
   
   private function chartStoryPoints()
   {
-    $gridOptions = array( 'transform' => 'translate('._GMARGIN.','._GMARGIN.')');
+    $gridOptions = array( 'transform' => 'translate('.self::_GMARGIN.','.self::_GMARGIN.')');
     $storyPointGrid = $this->openGridTag('chart-us', $gridOptions);
-    $dayUnit = _GWIDTH / $this->sprint_data['days'];
-    $pointsUnit = _GHEIGHT / $this->sprint_data['hours_estimate'];
+    $dayUnit = self::_GWIDTH / $this->sprint_data['length'];
+    $pointsUnit = self::_GHEIGHT / $this->sprint_data['hours_estimate'];
     $i = 0;
     
     foreach($this->burndown_data as $data_point)
@@ -186,10 +186,11 @@ class BurndownChart
   private function chartTaskHours()
   {
     
-    $gridOptions = array( 'transform' => 'translate('._GMARGIN.','._GMARGIN.')');
+    $gridOptions = array( 'transform' => 'translate('.self::_GMARGIN.','.self::_GMARGIN.')');
     $taskHoursGrid = $this->openGridTag('chart-tasks', $gridOptions);
-    $dayUnit = _GWIDTH / $this->sprint_data['days'];
-    $pointsUnit = _GHEIGHT / $this->sprint_data['hours_estimate'];
+    $dayUnit = self::_GWIDTH / $this->sprint_data['length'];
+    $pointsUnit = self::_GHEIGHT / $this->sprint_data['hours_estimate'];
+
     $i = 0;
     foreach($this->burndown_data as $data_point)
     {
@@ -198,7 +199,7 @@ class BurndownChart
       
       $previousY      = (($i == 0) ? $this->sprint_data['hours_estimate'] : $y ) * $pointsUnit;
       $y              = $data_point['hours_left'] * $pointsUnit;
-      $lineOptions = array('id' => 'day'.$i)
+      $lineOptions = array('id' => 'day'.$i);
       $taskHoursGrid .= $this->getLineTag($previousX, $previousY, $x, $y, $lineOptions);
     }
     
@@ -218,9 +219,12 @@ class BurndownChart
       $taskHoursGrid .= $this->getCircleTag($x, $y, 5, $circOptions);
       $taskHoursGrid .= $this->getTextTag($data_point['hours_left'], $x, $y);
       
-      $setOptions = array('attributeName' => 'opacity', 'to' => '1', 'begin' => 'day'.$i.'.mouseover;point'.$i-1.'.mouseover');
+      $beginParam = 'day'.$i.'.mouseover;point'.($i-1).'.mouseover';
+      $setOptions = array('attributeName' => 'opacity', 'to' => '1', 'begin' => $beginParam);
       $textAttribute =  $this->getSetAttributeTag($setOptions);
-      $setOptions = array('attributeName' => 'opacity', 'to' => '0', 'begin' => 'day'.$i.'.mouseout;point'.$i-1.'.mouseout');
+      
+      $beginParam = 'day'.$i.'.mouseout;point'.($i-1).'.mouseout';
+      $setOptions = array('attributeName' => 'opacity', 'to' => '0', 'begin' => $beginParam);
       $textAttribute .=  $this->getSetAttributeTag($setOptions);
 
       $text = $textAttribute.$burnedHours;
@@ -246,32 +250,32 @@ class BurndownChart
     
     $globalSlope      = $y/$x;
     $globalYIntercept = $y - $x * $globalSlope;
-    $globalX          = _GWIDTH;
+    $globalX          = self::_GWIDTH;
     $globalY          = $globalX * $globalSlope + $globalYIntercept;
-    $globalDiff       = $globalY * 100 / _GHEIGHT - 100;
+    $globalDiff       = $globalY * 100 / self::_GHEIGHT - 100;
 
-    if($globalY > _GHEIGHT) {
-      $globalY    = _GHEIGHT;
+    if($globalY > self::_GHEIGHT) {
+      $globalY    = self::_GHEIGHT;
       $globalX    = $globalY / $globalSlope - $globalYIntercept;
-      $globalDiff = 100 - $globalX * 100 / _GWIDTH;
+      $globalDiff = 100 - $globalX * 100 / self::_GWIDTH;
     }
 
     $globalRed    = abs(round(100 - $globalDiff)) == 0 ? '00' : 'ff';
     $globalGreen  = abs(round(100 - $globalDiff)) == 0 ? 187 : min( (1)*255, 210) - 75;
-    $globalGreen  = $globalGreen < 0 ? '00' : digitNumber(dechex($globalGreen));
+    $globalGreen  = $globalGreen < 0 ? '00' : $this->digitNumber(dechex($globalGreen));
     $globalColor  = $globalRed.$globalGreen.'00';
 
     /* local estimation */
     $localSlope       = ($y - $previousY) / ($x - $previousX);
     $localYIntercept  = $y - $x * $localSlope;
-    $localX           = _GWIDTH;
+    $localX           = self::_GWIDTH;
     $localY           = $localSlope * $localX + $localYIntercept;
-    $localDiff        = $localY * 100 / _GHEIGHT - 100;
+    $localDiff        = $localY * 100 / self::_GHEIGHT - 100;
 
-    if($localY > _GHEIGHT) {
-      $localY     = _GHEIGHT;
+    if($localY > self::_GHEIGHT) {
+      $localY     = self::_GHEIGHT;
       $localX     = ($localY - $localYIntercept) / $localSlope;
-      $localDiff  = 100 - $localX * 100 / _GWIDTH;
+      $localDiff  = 100 - $localX * 100 / self::_GWIDTH;
     }
 
     /* points left */
@@ -295,7 +299,7 @@ class BurndownChart
   
   private function chartGlobalEstimation($globalColor, $globalX, $globalY, $blink, $globalDiffRound, $globalDiffLegend)
   {
-      $gridOptions = array('fill' => '#'.$globalColor, 'stroke' => '#'.$globalColor, 'transform' => 'translate('._GMARGIN.','._GMARGIN.')');
+      $gridOptions = array('fill' => '#'.$globalColor, 'stroke' => '#'.$globalColor, 'transform' => 'translate('.self::_GMARGIN.','.self::_GMARGIN.')');
       $globalEstimateGrid = $this->openGridTag('chart-global', $gridOptions);
       $lineOptions = array( 'stroke-dasharray' => '50,10,10,10', 'stroke-width' => '2');
       $globalEstimateGrid .= $this->getLineTag(0, 0, $globalX, $globalY, $lineOptions);      
@@ -308,7 +312,7 @@ class BurndownChart
   private function chartLocalEstimation($x, $y, $localX, $localY, $localDiffRound, $localDiffLegend, $goalProjection=0)
   {
     
-    $gridOptions = array( 'transform' => 'translate('._GMARGIN.','._GMARGIN.')');
+    $gridOptions = array( 'transform' => 'translate('.self::_GMARGIN.','.self::_GMARGIN.')');
     $localEstimateGrid = $this->openGridTag('chart-local', $gridOptions);
     $lineOptions = array( 'stroke-dasharray' => '50,10,10,10', 'stroke-width' => '2');
     $localEstimateGrid .= $this->getLineTag($x, $y, $localX, $localY, $lineOptions);
@@ -321,7 +325,7 @@ class BurndownChart
   
   private function addJavascript($globalColor, $globalRed, $globalGreen, $globalX, $globalY, $globalSlope, $globalDiff, $localX, $localY, $localSlope, $localDiff)
   {
-    $dayUnit = _GWIDTH / $this->sprint_data['days'];
+    $dayUnit = self::_GWIDTH / $this->sprint_data['length'];
     $x = $this->globalArray['x'];
     $y = $this->globalArray['y'];
     $previousX = $this->globalArray['previousX'];
@@ -330,7 +334,7 @@ class BurndownChart
     
     $this->graphCode .= "<script type='text/javascript'>
       console.log(''
-        +'\n GraphMargin:'+ _GMARGIN
+        +'\n GraphMargin:'+ self::_GMARGIN
         +'\n unitDay:'+ $dayUnit
         +'\n ---'
         +'\n x:'+ $x
@@ -360,12 +364,12 @@ class BurndownChart
   {
      $idealLineGrid = $this->openGridTag('ideal');
      
-     $idealLineGrid .= $this->getLineTag(0,0,_GWIDTH,_GHEIGHT);
+     $idealLineGrid .= $this->getLineTag(0,0,self::_GWIDTH,self::_GHEIGHT);
      //ideal hours remaining
-     for ($i = 0; $i <= $sprint['days']; $i++)
+     for($i = 0; $i <= $sprint['days']; $i++)
      {
-       $circX = $i * _GWIDTH / $this->sprint_data['days'];
-       $circY = $i * _GHEIGHT / $this->sprint_date['days'];
+       $circX = $i * self::_GWIDTH / $this->sprint_data['length'];
+       $circY = $i * self::_GHEIGHT / $this->sprint_date['days'];
        $idealLineGrid .= $this->getCircleTag($circX, $circY, 5);
      }
      $idealLineGrid .= '</g>';
@@ -373,15 +377,17 @@ class BurndownChart
      return $idealLineGrid;
   }
   
-  private function openGridTag($id, options=array())
+  private function openGridTag($id, $options=array())
   {
     $gridOpenTag = '<g id="'.$id.'" ';
     if(!empty($options))
     {
       foreach($options as $key=>$value)
-      $gridOpenTag .= $key.'="'.$value.'" ';
+      {
+        $gridOpenTag .= $key.'="'.$value.'" ';
+      }
     }
-    gridOpenTag .='>';
+    $gridOpenTag .= '>';
     
     return $gridOpenTag;
   }
@@ -420,7 +426,7 @@ class BurndownChart
     $circleTag = '<circle ';
     $circleTag .= isset($options['id']) ? 'id="'.$options['id'].'" ' : '';
     unset($options['id']);
-    $circleTag .= 'cx="'.$xcoord.'" cy="'$ycoord.'" r="'.$radius.'" ';
+    $circleTag .= 'cx="'.$xcoord.'" cy="'.$ycoord.'" r="'.$radius.'" ';
     if(!empty($options))
     {
       foreach($options as $key=>$value)
@@ -436,7 +442,7 @@ class BurndownChart
     $rectTag = '<rect ';
     $rectTag .= isset($options['id']) ? 'id="'.$options['id'].'" ' : '';
     unset($options['id']);
-    $rectTag .= 'x="'.$xcoord.'" y="'$ycoord.'" width="'.$width.'" height="'.$height.'" ';
+    $rectTag .= 'x="'.$xcoord.'" y="'.$ycoord.'" width="'.$width.'" height="'.$height.'" ';
     if(!empty($options))
     {
       foreach($options as $key=>$value)
@@ -450,7 +456,7 @@ class BurndownChart
   private function getTextTag($text, $xcoord, $ycoord, $options=array())
   {
      $textTag = '<text ';
-     $textTag .= 'x="'.$xcoord.'" y="'$ycoord.'" ';
+     $textTag .= 'x="'.$xcoord.'" y="'.$ycoord.'" ';
      if(!empty($options))
      {
        foreach($options as $key=>$value)
@@ -462,7 +468,7 @@ class BurndownChart
      return $textTag;
   }
   
-  private function adjustDataByView($burndown, sprint)
+  private function adjustDataByView($burndown, $sprint)
   {
     $burndown_adj_data = array();
     $sprint_adj_data = array();
@@ -505,34 +511,34 @@ class BurndownChart
   private function getData($view)
   {
     // get the burndown values
-    $query = 'SELECT day, hours_left, points_left FROM TNC_burndown 
+    $query = 'SELECT day, hours_left, points_left FROM TEST_TNC_burndown 
               WHERE projects_id='.$this->project_id.' AND sprint_id='.$this->sprint_id.'
               ORDER BY day';
 
     $dbMgr = new DatabaseManager('dev');
     $result = $dbMgr->executeQuery($query);
 
-    $burndown_data = array();
+    $b_data = array();
     while( $ret = mysql_fetch_array($result, MYSQL_ASSOC) )
     {
-        $this->burndown_data[] = $ret;
+        $b_data[] = $ret;
     }
 
     // get the sprint info
-    $query = 'SELECT s.*, p.name FROM TNC_sprint s, TNC_projects p 
+    $query = 'SELECT s.*, p.name FROM TEST_TNC_sprint s, TNC_projects p 
               WHERE s.projects_id='.$this->project_id.' AND s.sprint_id='.$this->sprint_id.' AND p.id=s.projects_id';
 
-    $sprint_data = $dbMgr->executeQueryWithResult($query);
+    $s_data = $dbMgr->executeQueryWithResult($query);
     $dbMgr->closeConnection();
     
-    if($view == _ADJUSTED)
+    if($view == self::_ADJUSTED)
     {
-      list($this->burndown_data, $this->sprint_data) = $this->adjustDataByView($burndown_data, $sprint_data);
+      list($this->burndown_data, $this->sprint_data) = $this->adjustDataByView($b_data, $s_data);
     }
     else
     {
-      $this->burndown_data = $burndown_data;
-      $this->sprint_data = $sprint_data;
+      $this->burndown_data = $b_data;
+      $this->sprint_data = $s_data;
     }
   }
   
