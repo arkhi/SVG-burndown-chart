@@ -40,7 +40,8 @@
   $arrayUSCoords = array();
 ?>
 
-<svg  version="1.1"
+<svg  id="svgBurndownChart"
+      version="1.1"
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       preserveAspectRatio="xMidYMid meet"
@@ -65,9 +66,21 @@
       orient="auto">
       <circle cx="0" cy="0" r="5" />
     </marker>
+    <symbol id="label" viewBox="0 0 30 60">
+      <path id="labelSilhouette"
+            d="M 2.96875,0.5 C 1.608085,0.5 0.5,1.608103 0.5,2.96875 L 0.5,45 c 0,8.00813 6.491872,14.5 14.5,14.5 8.008129,0 14.5,-6.49187 14.5,-14.5 l 0,-42.03125 C 29.5,1.605764 28.394171,0.5 27.03125,0.5 z M 15,35.5 c 5.246705,0 9.5,4.253295 9.5,9.5 0,5.246705 -4.253295,9.5 -9.5,9.5 -5.246705,0 -9.5,-4.253295 -9.5,-9.5 0,-5.246705 4.253295,-9.5 9.5,-9.5 z" />
+      <rect id="labelTextBg"
+            x="4.5" y="4.5"
+            width="21" height="21"
+            rx="1" ry="1" />
+      <text x="15" y="7" fill="#333" dominant-baseline="hanging" text-anchor="middle" font-size="12px">1</text>
+    </g>
   </defs>
 
+
   <g id="grid" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
+    <rect id="graphFrame" x="0" y="0" width="<?= $graphWidth; ?>" height="<?= $graphHeight; ?>" />
+
     <g id="ordinate">
   <?php for ($i = 0; $i < $sprint['points']; $i += 10) : /* horizontal lines: points */ ?>
       <line x1="0" y1="<?= $graphHeight - $i * $unitPoint; ?>" x2="<?= $graphWidth; ?>" y2="<?= $graphHeight - $i * $unitPoint; ?>" />
@@ -78,7 +91,7 @@
 
     <g id="abscissa">
 <?php for ($i = 0; $i < $sprint['days']; $i += 1) : /* vertical lines: days */ ?>
-      <line x1="<?= $graphWidth - $i * $unitDay; ?>" y1="0" x2="<?= $graphWidth - $i * $unitDay; ?>" y2="<?= $graphHeight; ?>" />
+      <line x1="<?= $i * $unitDay; ?>" y1="0" x2="<?= $i * $unitDay; ?>" y2="<?= $graphHeight; ?>" />
   <?php if($i != 0) : ?>
       <text x="<?= $i * $unitDay; ?>" y="-12">day <?= $i; ?></text>
   <? endif; ?>
@@ -91,10 +104,7 @@
       <?php for ($i = 0; $i <= $sprint['days']; $i++) : /* ideal tasks remaining: dots */ ?>
       <circle cx="<?= $i * $unitDay; ?>" cy="<?= $i * $graphHeight / $sprint['days']; ?>" r="5" />
       <? endfor; ?>
-    </g><!-- #grid -->
-
-    <!-- frame -->
-    <rect id="graphFrame" x="0" y="0" width="<?= $graphWidth; ?>" height="<?= $graphHeight; ?>" />
+    </g><!-- #ideal -->
   </g><!-- #grid -->
 
   <!-- That's our goal -->
