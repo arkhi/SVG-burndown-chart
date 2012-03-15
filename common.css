@@ -15,8 +15,6 @@ and prefixing known sections with "=" (ex: "=reset") to go through each section
 ********************************************************************************
  =tips
 ********************************************************************************
-* This CSS relies heavily on the use of pseudo-elements for pictures
-
 * For order of properties in rule's block of declarations, see
   http://sh.thenetcircle.com:8001/projects/technical/wiki/CSS_coding_standard#Sorting-properties
 
