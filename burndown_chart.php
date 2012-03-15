@@ -83,6 +83,7 @@
       <text x="<?= $i * $unitDay; ?>" y="-12">day <?= $i; ?></text>
   <? endif; ?>
 <? endfor; ?>
+      <text x="<?= $graphWidth; ?>" y="-12">day <?= $sprint['days']; ?></text>
     </g><!-- #abscissa -->
 
     <g id="ideal">
