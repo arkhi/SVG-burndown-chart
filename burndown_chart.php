@@ -145,12 +145,6 @@
     $arrayTasksCoords[$i] = $x .', '. $y;
   ?>
     <text x="<?= $x - 12; ?>" y="<?= $y + 12; ?>"><?= $sprint['points'] - $burnedPoints; ?></text>
-
-    <text class="pointsBurned" x="<?= $previousX + 12; ?>" y="<?= $previousY - 12; ?>" opacity="0">
-      <set attributeName="opacity" to="1" begin="day<?= $i ?>.mouseover;point<?= $i-1 ?>.mouseover" />
-      <set attributeName="opacity" to="0" begin="day<?= $i ?>.mouseout;point<?= $i-1 ?>.mouseout" />
-      <?= $sprint['dailyPoints'][$i]; ?>
-    </text>
 <? endfor; ?>
 
     <polyline points="0,0 <?= implode(' ', $arrayTasksCoords); ?>"
