@@ -11,7 +11,7 @@
   /*
    * $variation can be used to experiment and test through the URL.
    */
-  $variation = isset($_GET['var']) ? $_GET['var'] : 11;
+  $variation = isset($_GET['var']) ? $_GET['var'] : 12;
 
   /*
    * Some data you'd like to change and update daily (dailyPoints & dailyUSPoints)
@@ -21,11 +21,11 @@
     'days'          => 15,
     'points'        => 197,
     'USPoints'      => 55,
-    'dailyPoints'   => array(12,21,17,$variation
+    'dailyPoints'   => array(12,21,17, 6,$variation
                             ),
-    'dailyUSPoints' => array( 0, 3, 1, 5
+    'dailyUSPoints' => array( 0, 3, 1, 5, 0
                             ),
-    'dailyBugs'     => array( 2, 3, 2, 3
+    'dailyBugs'     => array( 2, 3, 2, 3, 0
                             )
   );
 
@@ -53,32 +53,37 @@
     <filter id="dropShadow">
       <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
     </filter>
-    <marker id="markerTasks"
+    <marker id="markerTasks" class="markerNode"
       viewBox="-7 -7 14 14"
       markerWidth="4" markerHeight="4"
       orient="auto">
-      <circle cx="0" cy="0" r="5" fill="#fff" stroke="#900" stroke-width="2" />
+      <circle cx="0" cy="0" r="5" />
     </marker>
-    <marker id="markerUS"
+    <marker id="markerUS" class="markerNode"
       viewBox="-7 -7 14 14"
       markerWidth="5" markerHeight="5"
       orient="auto">
-      <circle cx="0" cy="0" r="5" fill="#fff" stroke="#069" stroke-width="2" />
+      <circle cx="0" cy="0" r="5" />
     </marker>
   </defs>
 
   <g id="grid" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
-<?php for ($i = 0; $i < $sprint['points']; $i += 10) : /* horizontal lines: points */ ?>
-    <line x1="0" y1="<?= $graphHeight - $i * $unitPoint; ?>" x2="<?= $graphWidth; ?>" y2="<?= $graphHeight - $i * $unitPoint; ?>" stroke-dasharray="5,5" />
-    <text x="-12" y="<?= $graphHeight - $i * $unitPoint; ?>" text-anchor="end" dominant-baseline="middle"><?= $i; ?></text>
-<? endfor; ?>
+    <g id="ordinate">
+  <?php for ($i = 0; $i < $sprint['points']; $i += 10) : /* horizontal lines: points */ ?>
+      <line x1="0" y1="<?= $graphHeight - $i * $unitPoint; ?>" x2="<?= $graphWidth; ?>" y2="<?= $graphHeight - $i * $unitPoint; ?>" />
+      <text x="-12" y="<?= $graphHeight - $i * $unitPoint; ?>"><?= $i; ?></text>
+  <? endfor; ?>
+      <text id="sprintTasksPoints" x="-12" y="-12"><?= $sprint['points']; ?></text>
+    </g><!-- #ordinate -->
 
+    <g id="abscissa">
 <?php for ($i = 0; $i < $sprint['days']; $i += 1) : /* vertical lines: days */ ?>
-    <line x1="<?= $graphWidth - $i * $unitDay; ?>" y1="0" x2="<?= $graphWidth - $i * $unitDay; ?>" y2="<?= $graphHeight; ?>" stroke-dasharray="5,5" />
+      <line x1="<?= $graphWidth - $i * $unitDay; ?>" y1="0" x2="<?= $graphWidth - $i * $unitDay; ?>" y2="<?= $graphHeight; ?>" />
   <?php if($i != 0) : ?>
-    <text x="<?= $i * $unitDay; ?>" y="-12" text-anchor="middle">day <?= $i; ?></text>
+      <text x="<?= $i * $unitDay; ?>" y="-12">day <?= $i; ?></text>
   <? endif; ?>
 <? endfor; ?>
+    </g><!-- #abscissa -->
 
     <g id="ideal">
       <line id="ideal_line" x1="0" y1="0" x2="<?= $graphWidth; ?>" y2="<?= $graphHeight; ?>" />
@@ -88,19 +93,18 @@
     </g><!-- #grid -->
 
     <!-- frame -->
-    <rect x="0" y="0" width="<?= $graphWidth; ?>" height="<?= $graphHeight; ?>" fill="none" stroke="#000" />
+    <rect id="graphFrame" x="0" y="0" width="<?= $graphWidth; ?>" height="<?= $graphHeight; ?>" />
   </g><!-- #grid -->
 
   <!-- That's our goal -->
-  <circle cx="<?= $graphWidth; ?>" cy="<?= $graphHeight; ?>" r="5" fill="#090" stroke="#000" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)" />
+  <circle id="sprintGoal" cx="<?= $graphWidth; ?>" cy="<?= $graphHeight; ?>" r="5" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)" />
 
 
 
   <g id="legends" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
-    <text x="-12" y="-12" fill="#900" text-anchor="end"><?= $sprint['points']; ?></text>
-    <text x="12" y="<?= $graphHeight - 88; ?>" fill="#999">Sprint <?= $sprint['number']; ?></text>
-    <text x="12" y="<?= $graphHeight - 50; ?>" fill="#900">Tasks: <?= $sprint['points']; ?></text>
-    <text x="12" y="<?= $graphHeight - 12; ?>" fill="#069">User Story: <?= $sprint['USPoints'] ?></text>
+    <text x="12" y="<?= $graphHeight - 88; ?>">Sprint <?= $sprint['number']; ?></text>
+    <text class="tasksPoints" x="12" y="<?= $graphHeight - 50; ?>">Tasks: <?= $sprint['points']; ?></text>
+    <text class="USPoints" x="12" y="<?= $graphHeight - 12; ?>">User Story: <?= $sprint['USPoints'] ?></text>
   </g><!-- /#legends -->
 
 
@@ -118,13 +122,12 @@
     <text x="<?= $x + 12; ?>" y="<?= $y - 12; ?>"><?= $sprint['USPoints'] - $burnedPoints; ?></text>
 <? endfor; ?>
 
-    <polyline fill="none" stroke="#069" stroke-width="3"
-              points="0,<?= $coordsModifier * $unitPoint; ?> <?= implode(' ', $arrayUSCoords); ?>"
+    <polyline points="0,<?= $coordsModifier * $unitPoint; ?> <?= implode(' ', $arrayUSCoords); ?>"
               marker-start="url(#markerUS)"
               marker-mid="url(#markerUS)"
               marker-end="url(#markerUS)" />
 
-    <text x="12" y="<?= $coordsModifier * $unitPoint -12; ?>" fill="#069"><?= $sprint['USPoints']; ?></text>
+    <text x="12" y="<?= $coordsModifier * $unitPoint -12; ?>"><?= $sprint['USPoints']; ?></text>
   </g><!-- /#chart-us -->
 
 
@@ -149,8 +152,7 @@
     </text>
 <? endfor; ?>
 
-    <polyline fill="none" stroke="#900"
-              points="0,0 <?= implode(' ', $arrayTasksCoords); ?>"
+    <polyline points="0,0 <?= implode(' ', $arrayTasksCoords); ?>"
               marker-start="url(#markerTasks)"
               marker-mid="url(#markerTasks)"
               marker-end="url(#markerTasks)" />
@@ -188,7 +190,7 @@
   $localSlope       = ($y - $previousY) / ($x - $previousX);
   $localYIntercept  = $y - $x * $localSlope;
   $localX           = $graphWidth;
-  $localY           = $localSlope * $localX + $localYIntercept;
+  $localY           = $localX * $localSlope + $localYIntercept;
   $localDiff        = $localY * 100 / $graphHeight - 100;
 
   if($localY > $graphHeight) {
@@ -214,22 +216,20 @@
   $blink  = $globalDiffAbs == 0 ? '' : '<animate attributeName="fill" values="#'.$globalColor.';#f00;#'.$globalColor.'" dur="1" repeatCount="indefinite" />';
 
 ?>
-  <g id="chart-global" fill="#<?= $globalColor; ?>" stroke="#<?= $globalColor; ?>" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
+  <g id="chart-global" class="estimation" fill="#<?= $globalColor; ?>" stroke="#<?= $globalColor; ?>" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
     <line
       x1="0" y1="0"
-      x2="<?= $globalX; ?>" y2="<?= $globalY; ?>"
-      stroke-dasharray="50,10,10,10" stroke-width="2" />
+      x2="<?= $globalX; ?>" y2="<?= $globalY; ?>" />
     <circle cx="<?= $globalX; ?>" cy="<?= $globalY; ?>" r="<?= 5 * pow($globalDiffAbs/100+1, 3); ?>">
       <?= $blink; ?>
     </circle>
     <text x="<?= $globalX + 12; ?>" y="<?= $globalY + 12; ?>"><?= $globalDiffLegend; ?></text>
   </g>
 
-  <g id="chart-local" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
+  <g id="chart-local" class="estimation" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
     <line
       x1="<?= $x; ?>" y1="<?= $y; ?>"
-      x2="<?= $localX; ?>" y2="<?= $localY; ?>"
-      stroke-dasharray="50,10,10,10" stroke-width="2" />
+      x2="<?= $localX; ?>" y2="<?= $localY; ?>" />
     <circle cx="<?= $localX; ?>" cy="<?= $localY; ?>" r="5" />
     <text x="<?= $localX + 12; ?>" y="<?= $localY + 12; ?>"><?= $localDiffLegend; ?></text>
   </g>
