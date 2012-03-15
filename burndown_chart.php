@@ -23,7 +23,7 @@
     'USPoints'      => 55,
     'dailyPoints'   => array(12,21,17,$variation
                             ),
-    'dailyUSPoints' => array( 0, 0, 0, 0
+    'dailyUSPoints' => array( 0, 3, 1, 5
                             ),
     'dailyBugs'     => array( 2, 3, 2, 3
                             )
