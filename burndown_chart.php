@@ -21,7 +21,7 @@
     'days'          => 15,
     'points'        => 197,
     'USPoints'      => 55,
-    'dailyPoints'   => array(12,21,17, 6,$variation
+    'dailyPoints'   => array(12,21,17, 23,$variation
                             ),
     'dailyUSPoints' => array( 0, 3, 1, 5, 0
                             ),
@@ -66,15 +66,6 @@
       orient="auto">
       <circle cx="0" cy="0" r="5" />
     </marker>
-    <symbol id="label" viewBox="0 0 30 60">
-      <path id="labelSilhouette"
-            d="M 2.96875,0.5 C 1.608085,0.5 0.5,1.608103 0.5,2.96875 L 0.5,45 c 0,8.00813 6.491872,14.5 14.5,14.5 8.008129,0 14.5,-6.49187 14.5,-14.5 l 0,-42.03125 C 29.5,1.605764 28.394171,0.5 27.03125,0.5 z M 15,35.5 c 5.246705,0 9.5,4.253295 9.5,9.5 0,5.246705 -4.253295,9.5 -9.5,9.5 -5.246705,0 -9.5,-4.253295 -9.5,-9.5 0,-5.246705 4.253295,-9.5 9.5,-9.5 z" />
-      <rect id="labelTextBg"
-            x="4.5" y="4.5"
-            width="21" height="21"
-            rx="1" ry="1" />
-      <text x="15" y="7" fill="#333" dominant-baseline="hanging" text-anchor="middle" font-size="12px">1</text>
-    </g>
   </defs>
 
 
@@ -125,10 +116,11 @@
   <?php
     $previousX      = ($i-1) * $unitDay + $unitDay;
     $previousY      = ($burnedPoints + $coordsModifier) * $unitPoint;
+
     $burnedPoints   += $sprint['dailyUSPoints'][$i];
     $x              = $i * $unitDay + $unitDay;
     $y              = ($burnedPoints + $coordsModifier) * $unitPoint;
-    $arrayUSCoords[$i] = $x .', '. $y;
+    $arrayUSCoords[$i] = $x .','. $y;
   ?>
     <text x="<?= $x + 12; ?>" y="<?= $y - 12; ?>"><?= $sprint['USPoints'] - $burnedPoints; ?></text>
 <? endfor; ?>
@@ -149,10 +141,11 @@
   <?php
     $previousX    = ($i-1) * $unitDay + $unitDay;
     $previousY    = $burnedPoints * $unitPoint;
+
     $burnedPoints += $sprint['dailyPoints'][$i];
     $x            = $i * $unitDay + $unitDay;
     $y            = $burnedPoints * $unitPoint;
-    $arrayTasksCoords[$i] = $x .', '. $y;
+    $arrayTasksCoords[$i] = $x .','. $y;
   ?>
     <text x="<?= $x - 12; ?>" y="<?= $y + 12; ?>"><?= $sprint['points'] - $burnedPoints; ?></text>
 <? endfor; ?>
@@ -238,6 +231,126 @@
     <circle cx="<?= $localX; ?>" cy="<?= $localY; ?>" r="5" />
     <text x="<?= $localX + 12; ?>" y="<?= $localY + 12; ?>"><?= $localDiffLegend; ?></text>
   </g>
+
+  <g id="labels" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>) translate(-15, -45)">
+<?php for ($i = 0; $i < count($sprint['dailyPoints']); $i++) : /* labels */ ?>
+    <g id="labelGroup_<?= $i+1; ?>">
+      <g id="labelTask_<?= $i+1; ?>" class="label"
+         transform="translate(<?= $arrayTasksCoords[$i]; ?>)">
+        <path class="labelSilhouette"
+              d="M 2.96875,0.5 C 1.608085,0.5 0.5,1.608103 0.5,2.96875 L 0.5,45 c 0,8.00813 6.491872,14.5 14.5,14.5 8.008129,0 14.5,-6.49187 14.5,-14.5 l 0,-42.03125 C 29.5,1.605764 28.394171,0.5 27.03125,0.5 z M 15,35.5 c 5.246705,0 9.5,4.253295 9.5,9.5 0,5.246705 -4.253295,9.5 -9.5,9.5 -5.246705,0 -9.5,-4.253295 -9.5,-9.5 0,-5.246705 4.253295,-9.5 9.5,-9.5 z" />
+        <text class="points" x="15" y="7" fill="#333" dominant-baseline="hanging" text-anchor="middle" font-size="12px"><?= $sprint['dailyPoints'][$i]; ?></text>
+      </g>
+      <g id="labelUS_<?= $i+1; ?>" class="label"
+         transform="translate(<?= $arrayUSCoords[$i]; ?>)">
+        <path class="labelSilhouette"
+              d="M 2.96875,0.5 C 1.608085,0.5 0.5,1.608103 0.5,2.96875 L 0.5,45 c 0,8.00813 6.491872,14.5 14.5,14.5 8.008129,0 14.5,-6.49187 14.5,-14.5 l 0,-42.03125 C 29.5,1.605764 28.394171,0.5 27.03125,0.5 z M 15,35.5 c 5.246705,0 9.5,4.253295 9.5,9.5 0,5.246705 -4.253295,9.5 -9.5,9.5 -5.246705,0 -9.5,-4.253295 -9.5,-9.5 0,-5.246705 4.253295,-9.5 9.5,-9.5 z" />
+        <text class="points"
+              x="15" y="7"
+              fill="#333"><?= $sprint['dailyUSPoints'][$i]; ?></text>
+      </g>
+    </g>
+<? endfor; ?>
+  </g>
+
+  <script>
+      var label = {
+        burndownChart : document.getElementById('svgBurndownChart'),
+        grid          : document.getElementById('grid'),
+        numItemsTasks : document.getElementById('chart-tasks').getElementsByTagName('polyline')[0].points.numberOfItems,
+        numItemsUS    : document.getElementById('chart-us').getElementsByTagName('polyline')[0].points.numberOfItems,
+        xlinkns       : 'http://www.w3.org/1999/xlink',
+        svgns         : 'http://www.w3.org/2000/svg',
+
+        init: function(){
+          this.formatGraph();
+          this.drawListeners();
+        },
+
+        /*
+         * Allow easier creation of SVG elements in the DOM
+         * thanks to Andrew Clover for
+         * http://stackoverflow.com/questions/3642035/jquerys-append-not-working-with-svg-element/3642265#3642265
+         *
+         */
+        makeSVG: function (ns, tag, attrs) {
+          var el= document.createElementNS(ns, tag);
+          for (var k in attrs)
+              el.setAttribute(k, attrs[k]);
+          return el;
+        },
+
+        /*
+         * Hide elements that can be hidden if JS is available
+         * Add the proper parameters for the interactions we want
+         *
+         */
+        formatGraph: function(){
+          var labelGroups     = document.getElementById('labels').childNodes,
+              labelGroupsNum  = labelGroups.length,
+              fadeIn          = new Array(),
+              fadeOut         = new Array(),
+              labelGroupI     = 1;
+
+          /* hide labels and define what triggers interaction */
+          for(var i = 0; i < labelGroupsNum ; i++){
+            if(labelGroups[i].nodeName.toLowerCase() == 'g'){
+              var fadeIn = this.makeSVG(this. svgns, 'animate', {
+                'attributeName' : 'opacity',
+                'to'            : 1,
+                'dur'           : '0.25s',
+                'begin'         : 'listener_'+ labelGroupI +'.mouseover',
+                'fill'          : 'freeze'
+              });
+              var fadeOut = this.makeSVG(this. svgns, 'animate', {
+                'attributeName' : 'opacity',
+                'to'            : 0,
+                'dur'           : '0.25s',
+                'begin'         : 'listener_'+ labelGroupI +'.mouseout',
+                'fill'          : 'freeze'
+              });
+
+              labelGroups[i].setAttribute('opacity', 0);
+              labelGroups[i].appendChild(fadeIn);
+              labelGroups[i].appendChild(fadeOut);
+
+              labelGroupI++;
+            }
+          }
+        },
+
+        /*
+         * Draw listeners if JS is available
+         *
+         */
+        drawListeners: function(){
+          var abscissas     = document.getElementById('abscissa').getElementsByTagName('line');
+          var abscissasNum  = abscissas.length;
+          var listener = new Array();
+
+          for(var i = 0; i < this.numItemsTasks ; i++) {
+            var abscissaXValue = abscissas[i].x1.baseVal.value;
+            var abscissaYValue = abscissas[i].y2.baseVal.value;
+
+            listener[i] = this.makeSVG(this.svgns, 'rect', {
+              'id'              : 'listener_'+ i,
+              'class'           : 'listener',
+              'x'               : abscissaXValue,
+              'y'               : 0,
+              'width'           : 50,
+              'height'          : abscissaYValue,
+              'fill'            : 'none',
+              'transform'       : 'translate(-25,0)',
+              'pointer-events'  : 'all',
+            });
+
+            this.grid.appendChild(listener[i]);
+          }
+        }
+      }
+
+      label.init();
+  </script>
 
   <script type="text/javascript">
     console.log(''

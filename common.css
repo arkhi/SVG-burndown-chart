@@ -23,11 +23,21 @@ and prefixing known sections with "=" (ex: "=reset") to go through each section
 *******************************************************************************/
 table {
   border-collapse: collapse;
+  margin: auto;
+  font-size: 12px;
+  color: #666;
 }
   th,
   td {
     padding: .25em 1em;
     border: solid #ccc 1px;
+  }
+  th {
+    color: #900;
+  }
+  thead th {
+    text-transform: uppercase;
+    color: #069;
   }
 
 
@@ -260,13 +270,24 @@ svg {
 /*******************************************************************************
  =JavaScript
 *******************************************************************************/
+.listener {
 /*
-.listener:hover {
-  fill: #900;
+  fill: rgba(102,0,0,.1);
+/**/
+  cursor: pointer;
 }
-*/
-#label {
-  stroke: #090;
-  fill: #fff;
+.label path {
+  stroke: #900;
+  fill: #900;
   stroke-width: 2;
+}
+.label text {
+  fill: #fff;
+  font-size: 12px;
+  dominant-baseline: hanging;
+  text-anchor: middle;
+}
+[id^="labelUS_"] path {
+  stroke: #069;
+  fill: #069;
 }
