@@ -131,6 +131,7 @@ svg {
 *******************************************************************************/
 #legends text {
   font-weight: bold;
+  text-anchor: end;
   fill: #999;
 }
 #legends .tasksPoints {
@@ -165,11 +166,9 @@ svg {
   font-weight: bolder;
 }
   #chart-us text {
-    fill: #069;
     stroke: none;
   }
   #chart-us polyline {
-    stroke: #069;
     stroke-width: 3;
     fill: none;
   }
@@ -187,18 +186,38 @@ svg {
   font-weight: bolder;
 }
   #chart-tasks text {
-    fill: #900;
     stroke: none;
     dominant-baseline: hanging;
   }
   #chart-tasks text.pointsBurned {
-    fill: #090;
     text-anchor: start;
     dominant-baseline: auto;
   }
   #chart-tasks polyline {
-    stroke: #900;
     stroke-width: 4;
+    fill: none;
+  }
+
+
+
+
+
+/* chart-bugs
+*******************************************************************************/
+#chart-bugs {
+  fill: #090;
+  stroke: #090;
+  font-size: 15px;
+  text-anchor: end;
+  font-weight: bolder;
+}
+  #chart-bugs text {
+    stroke: none;
+    dominant-baseline: hanging;
+  }
+  #chart-bugs polyline {
+    stroke-width: 2;
+    stroke-dasharray: 5,5;
     fill: none;
   }
 

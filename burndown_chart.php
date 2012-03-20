@@ -66,6 +66,13 @@
       orient="auto">
       <circle cx="0" cy="0" r="5" />
     </marker>
+    <marker id="markerBugs"
+      viewBox="0 0 14 14"
+      refX="7" refY="7"
+      markerWidth="5" markerHeight="5"
+      orient="auto">
+      <circle cx="7" cy="7" r="5" fill="#fff" stroke="#090" stroke-width="2" />
+    </marker>
   </defs>
 
 
@@ -104,9 +111,9 @@
 
 
   <g id="legends" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
-    <text x="12" y="<?= $graphHeight - 88; ?>">Sprint <?= $sprint['number']; ?></text>
-    <text class="tasksPoints" x="12" y="<?= $graphHeight - 50; ?>">Tasks: <?= $sprint['points']; ?></text>
-    <text class="USPoints" x="12" y="<?= $graphHeight - 12; ?>">User Story: <?= $sprint['USPoints'] ?></text>
+    <text x="<?= $graphWidth - 12; ?>" y="35">Sprint <?= $sprint['number']; ?></text>
+    <text class="tasksPoints" x="<?= $graphWidth - 12; ?>" y="<?= 70; ?>">Tasks: <?= $sprint['points']; ?></text>
+    <text class="USPoints" x="<?= $graphWidth - 12; ?>" y="<?= 105; ?>">User Story: <?= $sprint['USPoints'] ?></text>
   </g><!-- /#legends -->
 
 
@@ -152,7 +159,7 @@
 <? endfor; ?>
     <?php if(count($arrayTasksCoords) == 0){$arrayTasksCoords[0] = 0;} // If array is empty, set value to 0 ?>
 
-    <polyline points="0,<?= implode(' ', $arrayTasksCoords); ?>"
+    <polyline points="0,0 <?= implode(' ', $arrayTasksCoords); ?>"
               marker-start="url(#markerTasks)"
               marker-mid="url(#markerTasks)"
               marker-end="url(#markerTasks)" />
