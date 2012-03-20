@@ -5,7 +5,7 @@
    Just add [starSlash] caracters at the end of this line.
   header("Content-type: image/svg+xml");
   echo '<?xml version="1.0" encoding="utf-8"?>
-  <?xml-stylesheet href="common.css" type="text/css"?>';
+  <?xml-stylesheet href="../../common_v2.css" type="text/css"?>';
 /**/
 
   /*
@@ -17,16 +17,16 @@
    * Some data you'd like to change and update daily (dailyPoints & dailyUSPoints)
    */
   $sprint = array(
-    'number'        => 30,
+    'number'        => 31,
     'days'          => 15,
-    'points'        => 197,
-    'USPoints'      => 55,
-    'dailyPoints'   => array(12,21,17, 23,$variation
+    'points'        => 346,
+    'USPoints'      => 87,
+    'dailyPoints'   => array(
                             ),
-    'dailyUSPoints' => array( 0, 3, 1, 5, 0
+    'dailyUSPoints' => array(
                             ),
-    'dailyBugs'     => array( 2, 3, 2, 3, 0
-                            )
+    'dailyBugs' => array(
+                        )
   );
 
   $graphWidth     = 2000;
@@ -118,12 +118,13 @@
     $previousY      = ($burnedPoints + $coordsModifier) * $unitPoint;
 
     $burnedPoints   += $sprint['dailyUSPoints'][$i];
-    $x              = $i * $unitDay + $unitDay;
-    $y              = ($burnedPoints + $coordsModifier) * $unitPoint;
-    $arrayUSCoords[$i] = $x .','. $y;
+    $xUS            = $i * $unitDay + $unitDay;
+    $yUS            = ($burnedPoints + $coordsModifier) * $unitPoint;
+    $arrayUSCoords[$i] = $xUS .','. $yUS;
   ?>
-    <text x="<?= $x + 12; ?>" y="<?= $y - 12; ?>"><?= $sprint['USPoints'] - $burnedPoints; ?></text>
+    <text x="<?= $xUS + 12; ?>" y="<?= $yUS - 12; ?>"><?= $sprint['USPoints'] - $burnedPoints; ?></text>
 <? endfor; ?>
+    <?php if(count($arrayUSCoords) == 0){$arrayUSCoords[0] = 0;} // If array is empty, set value to 0 ?>
 
     <polyline points="0,<?= $coordsModifier * $unitPoint; ?> <?= implode(' ', $arrayUSCoords); ?>"
               marker-start="url(#markerUS)"
@@ -143,18 +144,40 @@
     $previousY    = $burnedPoints * $unitPoint;
 
     $burnedPoints += $sprint['dailyPoints'][$i];
-    $x            = $i * $unitDay + $unitDay;
-    $y            = $burnedPoints * $unitPoint;
-    $arrayTasksCoords[$i] = $x .','. $y;
+    $xTasks       = $i * $unitDay + $unitDay;
+    $yTasks       = $burnedPoints * $unitPoint;
+    $arrayTasksCoords[$i] = $xTasks .','. $yTasks;
   ?>
-    <text x="<?= $x - 12; ?>" y="<?= $y + 12; ?>"><?= $sprint['points'] - $burnedPoints; ?></text>
+    <text x="<?= $xTasks - 12; ?>" y="<?= $yTasks + 12; ?>"><?= $sprint['points'] - $burnedPoints; ?></text>
 <? endfor; ?>
+    <?php if(count($arrayTasksCoords) == 0){$arrayTasksCoords[0] = 0;} // If array is empty, set value to 0 ?>
 
-    <polyline points="0,0 <?= implode(' ', $arrayTasksCoords); ?>"
+    <polyline points="0,<?= implode(' ', $arrayTasksCoords); ?>"
               marker-start="url(#markerTasks)"
               marker-mid="url(#markerTasks)"
               marker-end="url(#markerTasks)" />
   </g><!-- /#chart-tasks -->
+
+
+
+  <g id="chart-bugs" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
+
+<?php for ($i = 0, $burnedPoints = 0; $i < count($sprint['dailyBugs']); $i++) : /* tasks */ ?>
+  <?php
+    $dailyBugs  = $sprint['dailyBugs'][$i];
+    $xBugs      = $i * $unitDay + $unitDay;
+    $yBugs      = $graphHeight - $dailyBugs * $unitPoint;
+    $arrayBugsCoords[$i] = $xBugs .', '. $yBugs;
+  ?>
+    <text x="<?= $xBugs + 12; ?>" y="<?= $yBugs + 12; ?>"><?= $sprint['dailyBugs'][$i]; ?></text>
+<? endfor; ?>
+    <?php if(count($arrayBugsCoords) == 0){$arrayBugsCoords[0] = 0;} // If array is empty, set value to 0 ?>
+
+    <polyline points="0,<?= $graphHeight; ?> <?= implode(' ', $arrayBugsCoords); ?>"
+              marker-start="url(#markerBugs)"
+              marker-mid="url(#markerBugs)"
+              marker-end="url(#markerBugs)" />
+  </g><!-- /#chart-bugs -->
 
 
 
@@ -165,8 +188,8 @@
   }
 
   /* global estimation */
-  $globalSlope      = $y/$x;
-  $globalYIntercept = $y - $x * $globalSlope;
+  $globalSlope      = $yTasks/$xTasks;
+  $globalYIntercept = $yTasks - $xTasks * $globalSlope;
   $globalX          = $graphWidth;
   $globalY          = $globalX * $globalSlope + $globalYIntercept;
   $globalDiff       = $globalY * 100 / $graphHeight - 100;
@@ -185,8 +208,8 @@
   $globalColor  = $globalRed.$globalGreen.'00';
 
   /* local estimation */
-  $localSlope       = ($y - $previousY) / ($x - $previousX);
-  $localYIntercept  = $y - $x * $localSlope;
+  $localSlope       = ($yTasks - $previousY) / ($xTasks - $previousX);
+  $localYIntercept  = $yTasks - $xTasks * $localSlope;
   $localX           = $graphWidth;
   $localY           = $localX * $localSlope + $localYIntercept;
   $localDiff        = $localY * 100 / $graphHeight - 100;
@@ -226,7 +249,7 @@
 
   <g id="chart-local" class="estimation" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
     <line
-      x1="<?= $x; ?>" y1="<?= $y; ?>"
+      x1="<?= $xTasks; ?>" y1="<?= $yTasks; ?>"
       x2="<?= $localX; ?>" y2="<?= $localY; ?>" />
     <circle cx="<?= $localX; ?>" cy="<?= $localY; ?>" r="5" />
     <text x="<?= $localX + 12; ?>" y="<?= $localY + 12; ?>"><?= $localDiffLegend; ?></text>
@@ -253,106 +276,109 @@
 <? endfor; ?>
   </g>
 
-  <script>
-      var label = {
-        burndownChart : document.getElementById('svgBurndownChart'),
-        grid          : document.getElementById('grid'),
-        numItemsTasks : document.getElementById('chart-tasks').getElementsByTagName('polyline')[0].points.numberOfItems,
-        numItemsUS    : document.getElementById('chart-us').getElementsByTagName('polyline')[0].points.numberOfItems,
-        xlinkns       : 'http://www.w3.org/1999/xlink',
-        svgns         : 'http://www.w3.org/2000/svg',
+  <script type="text/javascript">
+  <![CDATA[
+    var label = {
+      burndownChart : document.getElementById('svgBurndownChart'),
+      grid          : document.getElementById('grid'),
+      numItemsTasks : document.getElementById('chart-tasks').getElementsByTagName('polyline')[0].points.numberOfItems,
+      numItemsUS    : document.getElementById('chart-us').getElementsByTagName('polyline')[0].points.numberOfItems,
+      xlinkns       : 'http://www.w3.org/1999/xlink',
+      svgns         : 'http://www.w3.org/2000/svg',
 
-        init: function(){
-          this.formatGraph();
-          this.drawListeners();
-        },
+      init: function(){
+        this.formatGraph();
+        this.drawListeners();
+      },
 
-        /*
-         * Allow easier creation of SVG elements in the DOM
-         * thanks to Andrew Clover for
-         * http://stackoverflow.com/questions/3642035/jquerys-append-not-working-with-svg-element/3642265#3642265
-         *
-         */
-        makeSVG: function (ns, tag, attrs) {
-          var el= document.createElementNS(ns, tag);
-          for (var k in attrs)
-              el.setAttribute(k, attrs[k]);
-          return el;
-        },
+      /*
+       * Allow easier creation of SVG elements in the DOM
+       * thanks to Andrew Clover for
+       * http://stackoverflow.com/questions/3642035/jquerys-append-not-working-with-svg-element/3642265#3642265
+       *
+       */
+      makeSVG: function (ns, tag, attrs) {
+        var el= document.createElementNS(ns, tag);
+        for (var k in attrs)
+            el.setAttribute(k, attrs[k]);
+        return el;
+      },
 
-        /*
-         * Hide elements that can be hidden if JS is available
-         * Add the proper parameters for the interactions we want
-         *
-         */
-        formatGraph: function(){
-          var labelGroups     = document.getElementById('labels').childNodes,
-              labelGroupsNum  = labelGroups.length,
-              fadeIn          = new Array(),
-              fadeOut         = new Array(),
-              labelGroupI     = 1;
+      /*
+       * Hide elements that can be hidden if JS is available
+       * Add the proper parameters for the interactions we want
+       *
+       */
+      formatGraph: function(){
+        var labelGroups     = document.getElementById('labels').childNodes,
+            labelGroupsNum  = labelGroups.length,
+            fadeIn          = new Array(),
+            fadeOut         = new Array(),
+            labelGroupI     = 1;
 
-          /* hide labels and define what triggers interaction */
-          for(var i = 0; i < labelGroupsNum ; i++){
-            if(labelGroups[i].nodeName.toLowerCase() == 'g'){
-              var fadeIn = this.makeSVG(this. svgns, 'animate', {
-                'attributeName' : 'opacity',
-                'to'            : 1,
-                'dur'           : '0.25s',
-                'begin'         : 'listener_'+ labelGroupI +'.mouseover',
-                'fill'          : 'freeze'
-              });
-              var fadeOut = this.makeSVG(this. svgns, 'animate', {
-                'attributeName' : 'opacity',
-                'to'            : 0,
-                'dur'           : '0.25s',
-                'begin'         : 'listener_'+ labelGroupI +'.mouseout',
-                'fill'          : 'freeze'
-              });
-
-              labelGroups[i].setAttribute('opacity', 0);
-              labelGroups[i].appendChild(fadeIn);
-              labelGroups[i].appendChild(fadeOut);
-
-              labelGroupI++;
-            }
-          }
-        },
-
-        /*
-         * Draw listeners if JS is available
-         *
-         */
-        drawListeners: function(){
-          var abscissas     = document.getElementById('abscissa').getElementsByTagName('line');
-          var abscissasNum  = abscissas.length;
-          var listener = new Array();
-
-          for(var i = 0; i < this.numItemsTasks ; i++) {
-            var abscissaXValue = abscissas[i].x1.baseVal.value;
-            var abscissaYValue = abscissas[i].y2.baseVal.value;
-
-            listener[i] = this.makeSVG(this.svgns, 'rect', {
-              'id'              : 'listener_'+ i,
-              'class'           : 'listener',
-              'x'               : abscissaXValue,
-              'y'               : 0,
-              'width'           : 50,
-              'height'          : abscissaYValue,
-              'fill'            : 'none',
-              'transform'       : 'translate(-25,0)',
-              'pointer-events'  : 'all',
+        /* hide labels and define what triggers interaction */
+        for(var i = 0; i < labelGroupsNum ; i++){
+          if(labelGroups[i].nodeName.toLowerCase() == 'g'){
+            var fadeIn = this.makeSVG(this. svgns, 'animate', {
+              'attributeName' : 'opacity',
+              'to'            : 1,
+              'dur'           : '0.25s',
+              'begin'         : 'listener_'+ labelGroupI +'.mouseover',
+              'fill'          : 'freeze'
+            });
+            var fadeOut = this.makeSVG(this. svgns, 'animate', {
+              'attributeName' : 'opacity',
+              'to'            : 0,
+              'dur'           : '0.25s',
+              'begin'         : 'listener_'+ labelGroupI +'.mouseout',
+              'fill'          : 'freeze'
             });
 
-            this.grid.appendChild(listener[i]);
+            labelGroups[i].setAttribute('opacity', 0);
+            labelGroups[i].appendChild(fadeIn);
+            labelGroups[i].appendChild(fadeOut);
+
+            labelGroupI++;
           }
         }
-      }
+      },
 
-      label.init();
+      /*
+       * Draw listeners if JS is available
+       *
+       */
+      drawListeners: function(){
+        var abscissas     = document.getElementById('abscissa').getElementsByTagName('line');
+        var abscissasNum  = abscissas.length;
+        var listener = new Array();
+
+        for(var i = 0; i < this.numItemsTasks ; i++) {
+          var abscissaXValue = abscissas[i].x1.baseVal.value;
+          var abscissaYValue = abscissas[i].y2.baseVal.value;
+
+          listener[i] = this.makeSVG(this.svgns, 'rect', {
+            'id'              : 'listener_'+ i,
+            'class'           : 'listener',
+            'x'               : abscissaXValue,
+            'y'               : 0,
+            'width'           : 50,
+            'height'          : abscissaYValue,
+            'fill'            : 'none',
+            'transform'       : 'translate(-25,0)',
+            'pointer-events'  : 'all',
+          });
+
+          this.grid.appendChild(listener[i]);
+        }
+      }
+    }
+
+    label.init();
+  ]]>
   </script>
 
   <script type="text/javascript">
+  <![CDATA[
     console.log(''
       +'\n GraphMargin: '+ <?= $GraphMargin; ?>
       +'\n unitDay: '+ <?= $unitDay; ?>
@@ -378,5 +404,6 @@
       +'\n localY: '+ <?= $localY; ?>
       +'\n localDiff: '+ <?= $localDiff; ?>
     );
+  ]]>
   </script>
 </svg>
