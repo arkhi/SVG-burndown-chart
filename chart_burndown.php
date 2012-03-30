@@ -1,13 +1,23 @@
 <?php
-include("burndown_chart_b.php");
+include("DataManager.php");
+include("GraphManage.php");
 
-echo graphBurndown($_GET['pid'], $_GET['sid'], $_GET['view']);
+echo chartBurndown($_GET['pid'], $_GET['sid'], $_GET['view']);
 
-function graphBurndown($project_id, $sprint_id, $view=0)
+function chartBurndown($project_id, $sprint_id, $view=0)
 {
-  $grapher = new BurndownChart($project_id, $sprint_id);
+  $dataMgr = new DataManager();
   
-  $grapher->graphData($view);
+  list($burndownData, $sprintData) = $dataMgr->getData($project_id, $sprint_id, $view);
+  array($sprintName, $sprintIdNumber, $sprintLength, $sprintPointsEstimate, $sprintTaskEstimate) = $dataMgr->splitSprintData($sprintData);
   
-  return $grapher->render();
+  $graphMgr = new GraphManager(1000, 2000);
+  $viewBox = $graphMgr->getViewBoxDimensions();
+  
+  list($graphHeight, $graphWidth, $graphMargin) = $graphMgr->getGraphDimensions();
+  list($unitPoint, $unitDay) = $graphMgr->getUnitPoints($heightBase, $widthBase);
+  
+  $burndownPointsData = $graphMgr->getPlotPoints($burndownData, 'points_left', $sprintPointsEstimate, $sprintHoursEstimate, $sprintLength, false);
+  $burndownTaskData = $graphMgr->getPlotPoints($burndownData, 'hours_left', $sprintHoursEstimate, $sprintHoursEstimate, $sprintLength, true);
+ 
 }
