@@ -1,3 +1,6 @@
+<?php header("Content-type: image/svg+xml"); ?>
+<?php echo '<?xml version="1.0" encoding="utf-8"?>' ?>
+<?php echo '<?xml-stylesheet href="common.css" type="text/css"?>' ?>
 <svg  id="svgBurndownChart"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
@@ -38,16 +41,16 @@
         <rect id="graphFrame" x="0" y="0" width="<?php echo $graphWidth; ?>" height="<? echo $graphHeight; ?>" />
 
         <g id="ordinate">
-          <?php for ($i = 0; $i < $sprintHoursEstimate; $i += 10) : /* horizontal lines: points */ ?>
+          <?php for ($i = 0; $i < $sprintTaskEstimate; $i += 10) : /* horizontal lines: points */ ?>
               <line x1="0" y1="<?php echo  $graphHeight - $i * $unitPoint; ?>" x2="<?php echo  $graphWidth; ?>" y2="<?php echo  $graphHeight - $i * $unitPoint; ?>" />
               <text x="-12" y="<?php echo  $graphHeight - $i * $unitPoint; ?>"><?php echo  $i; ?></text>
           <? endfor; ?>
-          <text id="sprintTasksPoints" x="-12" y="-12"><?php echo $sprintHoursEstimate; ?></text>
+          <text id="sprintTasksPoints" x="-12" y="-12"><?php echo $sprintTaskEstimate; ?></text>
         </g><!-- #ordinate -->
 
         <g id="abscissa">
           <?php for ($i = 0; $i < $sprintLength; $i += 1) : /* vertical lines: days */ ?>
-              <line x1="<?php echo $i * $unitDay; ?>" y1="0" x2="<?php echo  $i * $unitDay; ?>" y2="<?php echo<?php echo  $graphHeight; ?>" />
+              <line x1="<?php echo $i * $unitDay; ?>" y1="0" x2="<?php echo  $i * $unitDay; ?>" y2="<?php echo  $graphHeight; ?>" />
               <?php if($i != 0) : ?>
                   <text x="<?php echo  $i * $unitDay; ?>" y="-12">day <?php echo  $i; ?></text>
               <? endif; ?>
@@ -70,7 +73,7 @@
 
       <g id="legends" transform="translate(<?php echo  $graphMargin. ',' .$graphMargin; ?>)">
         <text x="<?php echo  $graphWidth - 12; ?>" y="35">Sprint <?php echo  $sprintIdNumber; ?></text>
-        <text class="tasksPoints" x="<?php echo  $graphWidth - 12; ?>" y="<?php echo  70; ?>">Tasks: <?php echo  $sprintHoursEstimate; ?></text>
+        <text class="tasksPoints" x="<?php echo  $graphWidth - 12; ?>" y="<?php echo  70; ?>">Tasks: <?php echo  $sprintTaskEstimate; ?></text>
         <text class="USPoints" x="<?php echo  $graphWidth - 12; ?>" y="<?php echo  105; ?>">User Story: <?php echo  $sprintPointsEstimate ?></text>
       </g><!-- /#legends -->
 
@@ -81,14 +84,14 @@
         <?php foreach ($burndownPointsData as $dataKey => $dataCoords) : /* user stories */ ?>
           <text x="<?php echo  $dataCoords[0] + 12; ?>" y="<?php echo  $dataCoords[1] - 12; ?>"><?php echo  $dataKey ?></text>
           <?php $coords .= $dataCoords[0].','.$dataCoords[1].' '; ?>
-        <? endfor; ?>
+        <?php endforeach; ?>
 
         <polyline points="0,<?php echo $unitPoint; ?> <?php echo $coords; ?>"
                   marker-start="url(#markerUS)"
                   marker-mid="url(#markerUS)"
                   marker-end="url(#markerUS)" />
 
-        <text x="12" y="<?php echo  $graphHeight/$sprintHoursEstimate - 12; ?>"><?php echo  $sprintPointsEstimate; ?></text>
+        <text x="12" y="<?php echo  $graphHeight/$sprintTaskEstimate - 12; ?>"><?php echo  $sprintPointsEstimate; ?></text>
       </g><!-- /#chart-us -->
 
 
@@ -97,7 +100,7 @@
         <?php foreach ($burndownTaskData as $dataKey =>  $dataCoords): /* tasks */ ?>
             <text x="<?php echo  $dataCoords[0] - 12; ?>" y="<?php echo  $dataCoords[1] + 12; ?>"><?php echo  $dataKey ?></text>
             <?php $coords .= $dataCoords[0].','.$dataCoords[1].' '; ?>
-        <? endfor; ?>
+        <?php endforeach; ?>
         <?php if(count($arrayTasksCoords) == 0){$arrayTasksCoords[0] = 0;} // If array is empty, set value to 0 ?>
 
         <polyline points="0,0 <?php echo $coords; ?>"
@@ -105,8 +108,6 @@
                 marker-mid="url(#markerTasks)"
                 marker-end="url(#markerTasks)" />
       </g><!-- /#chart-tasks -->
-
-############################WE ARE HERE##################
 
       <g id="chart-bugs" transform="translate(<?php echo  $graphMargin. ',' .$graphMargin; ?>)">
 
@@ -266,26 +267,25 @@
       +'\n GraphMargin: '+ <?php echo  $graphMargin; ?>
       +'\n unitDay: '+ <?php echo  $unitDay; ?>
       +'\n ---'
-      +'\n x: '+ <?php echo  $x; ?>
-      +'\n y: '+ <?php echo  $y; ?>
-      +'\n previousX: '+ <?php echo  $previousX; ?>
-      +'\n previousY: '+ <?php echo  $previousY; ?>
-      +'\n burnedPoints: '+ <?php echo  $burnedPoints; ?>
+      +'\n x: '+ <?php echo  $lastCoords['xCoord']; ?>
+      +'\n y: '+ <?php echo  $lastCoords['yCoord']; ?>
+      +'\n previousX: '+ <?php echo  $lastCoords['prevXCoord']; ?>
+      +'\n previousY: '+ <?php echo  $lastCoords['prevYCoord']; ?>
       +'\n ---'
-      +'\n globalSlope: '+ <?php echo  $globalSlope; ?>
-      +'\n globalX: '+ <?php echo  $globalX; ?>
-      +'\n globalY: '+ <?php echo  $globalY; ?>
-      +'\n globalDiff: '+ <?php echo  $globalDiff; ?>
-      +'\n globalDiffAbs: '+ <?php echo  $globalDiffAbs; ?>
+      +'\n globalSlope: '+ <?php echo  $globalEstimates['slope']; ?>
+      +'\n globalX: '+ <?php echo  $globalEstimates['xCoord']; ?>
+      +'\n globalY: '+ <?php echo  $globalEstimates['yCoord']; ?>
+      +'\n globalDiff: '+ <?php echo  $globalEstimates['diff']; ?>
+      +'\n globalDiffAbs: '+ <?php echo  $globalEstimates['diffAbs']; ?>
       +'\n ---'
-      +'\n globalRed: <?php echo  $globalRed; ?>'
-      +'\n globalGreen: <?php echo  $globalGreen; ?>'
-      +'\n globalColor: <?php echo  $globalColor; ?>'
+      +'\n globalRed: <?php echo  $globalEstimates['red']; ?>'
+      +'\n globalGreen: <?php echo  $globalEstimates['green']; ?>'
+      +'\n globalColor: <?php echo  $globalEstimates['color']; ?>'
       +'\n ---'
-      +'\n localSlope: '+ <?php echo  $localSlope; ?>
-      +'\n localX: '+ <?php echo  $localX; ?>
-      +'\n localY: '+ <?php echo  $localY; ?>
-      +'\n localDiff: '+ <?php echo  $localDiff; ?>
+      +'\n localSlope: '+ <?php echo  $localEstimates['slope']; ?>
+      +'\n localX: '+ <?php echo  $localEstimates['xCoord']; ?>
+      +'\n localY: '+ <?php echo  $localEstimates['yCoord']; ?>
+      +'\n localDiff: '+ <?php echo  $localEstimates['diff']; ?>
     );
   ]]>
   </script>

@@ -10,7 +10,7 @@ class GraphManager
   private $xPlotPoint;
   private $previousXPlotPoint;
   
-  public __constructor($height, $width)
+  public function __construct($height, $width)
   {
     $this->graphHeight = $height;
     $this->graphWidth  = $width;
@@ -18,8 +18,8 @@ class GraphManager
   
   public function getViewBoxDimensions()
   {
-    $width = $graphWidth + 2 * $graphMargin;
-    $height =  $graphHeight + 2 * $graphMargin;
+    $width = $this->graphWidth + 2 * $this->graphMargin;
+    $height =  $this->graphHeight + 2 * $this->graphMargin;
     $viewBoxDimensions = array($width, $height);
     
     return $viewBoxDimensions;
@@ -27,7 +27,8 @@ class GraphManager
   
   public function getGraphDimensions()
   {
-    $graphDimensions = array($this->graphWidth, $this->graphHeight, $graphMargin);
+    $graphDimensions = array($this->graphWidth, $this->graphHeight, $this->graphMargin);
+    return $graphDimensions;
   }
   
   public function getUnitPoints($heightBase, $widthBase)
@@ -67,7 +68,7 @@ class GraphManager
     return $arrayCoords;
   }
   
-  private function getGlobalEstimates()
+  public function getGlobalEstimates()
   {
       /* global estimation */
       $globalSlope      = $this->yPlotPoint/$this->xPlotPoint;
@@ -129,6 +130,8 @@ class GraphManager
                            'xCoord' => $localX,
                            'yCoord' => $localY,
                            'diff'   => $localDiff);
+                           
+      return array($globalValues, $localValues);
   }
   
   public function getLastCoords()
