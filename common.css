@@ -1,0 +1,315 @@
+/*******************************************************************************
+ * This CSS is specific to SVG burndown plugin
+********************************************************************************
+- universal selectors
+- global styles svg
+- markers svg
+- grid svg
+- charts svg
+- estimations svg
+
+
+You can jump through the document by using your search tool
+and prefixing known sections with "=" (ex: "=reset") to go through each section
+
+********************************************************************************
+ =tips
+********************************************************************************
+* For order of properties in rule's block of declarations, see
+  http://sh.thenetcircle.com:8001/projects/technical/wiki/CSS_coding_standard#Sorting-properties
+
+********************************************************************************
+ =universal selectors
+*******************************************************************************/
+table {
+  border-collapse: collapse;
+  margin: auto;
+  font-size: 12px;
+  color: #666;
+}
+  th,
+  td {
+    padding: .25em 1em;
+    border: solid #ccc 1px;
+  }
+  th {
+    color: #900;
+  }
+  thead th {
+    text-transform: uppercase;
+    color: #069;
+  }
+
+
+
+
+
+
+
+
+
+
+/*******************************************************************************
+ =global styles svg
+*******************************************************************************/
+svg {
+  position: relative;
+  top: 0;
+  left: 0;
+  max-height: 100%;
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+  font-family: Verdana;
+  font-size: 24px;
+  font-weight: 900;
+  fill: #666;
+  stroke: none;
+}
+
+
+
+
+
+
+
+
+
+
+/*******************************************************************************
+ =markers svg
+*******************************************************************************/
+.markerNode circle {
+  stroke: #900;
+  stroke-width: 2px;
+  fill: #fff;
+}
+#markerUS circle {
+  stroke: #069;
+}
+
+
+
+
+
+
+
+
+
+
+/*******************************************************************************
+ =grid svg
+*******************************************************************************/
+#grid circle,
+#grid line {
+  fill: #ddd;
+  stroke: #ddd;
+}
+#grid line {
+  stroke-dasharray: 5,5;
+}
+  #abscissa text {
+    text-anchor: middle;
+  }
+  #ordinate text {
+    text-anchor: end;
+    dominant-baseline: middle;
+  }
+  #sprintTasksPoints {
+    fill: #900;
+  }
+#graphFrame {
+  stroke: #000;
+  fill: none;
+}
+
+
+
+
+
+/* legends
+*******************************************************************************/
+#legends text {
+  font-weight: bold;
+  text-anchor: end;
+  fill: #999;
+}
+#legends .tasksPoints {
+  fill: #900;
+}
+#legends .USPoints {
+  fill: #069;
+}
+#legends .bugPoints {
+  fill: #090;
+}
+#sprintGoal {
+ stroke: #000;
+ fill: #090;
+}
+
+
+
+
+
+
+
+
+
+
+/*******************************************************************************
+ =charts svg
+*******************************************************************************/
+/* chart-us
+*******************************************************************************/
+#chart-us {
+  stroke: #069;
+  stroke-width: 2px;
+  fill: #069;
+  font-weight: bolder;
+}
+  #chart-us text {
+    stroke: none;
+  }
+  #chart-us polyline {
+    stroke-width: 3;
+    fill: none;
+  }
+
+
+
+
+
+/* chart-tasks
+*******************************************************************************/
+#chart-tasks {
+  fill: #900;
+  stroke: #900;
+  text-anchor: end;
+  font-weight: bolder;
+}
+  #chart-tasks text {
+    stroke: none;
+    dominant-baseline: hanging;
+  }
+  #chart-tasks text.pointsBurned {
+    text-anchor: start;
+    dominant-baseline: auto;
+  }
+  #chart-tasks polyline {
+    stroke-width: 4;
+    fill: none;
+  }
+
+
+
+
+
+/* chart-bugs
+*******************************************************************************/
+#chart-bugs {
+  fill: #090;
+  stroke: #090;
+  font-size: 15px;
+  text-anchor: end;
+  font-weight: bolder;
+}
+  #chart-bugs text {
+    stroke: none;
+    dominant-baseline: hanging;
+  }
+  #chart-bugs polyline {
+    stroke-width: 2;
+    stroke-dasharray: 5,5;
+    fill: none;
+  }
+
+
+
+
+
+
+
+
+
+
+/*******************************************************************************
+ =estimations svg
+*******************************************************************************/
+.estimation {
+  text-anchor: start;
+  font-weight: bolder;
+}
+  .estimation line {
+    stroke-dasharray: 50,10,10,10;
+    stroke-width: 2;
+  }
+
+  .estimation text {
+    stroke: none;
+    dominant-baseline: hanging;
+  }
+
+
+
+
+
+/* chart-global
+*******************************************************************************/
+#chart-global text {
+  fill: #333;
+}
+#chart-global circle {
+  stroke: #333;
+}
+
+
+
+
+
+/* chart-local
+*******************************************************************************/
+#chart-local text {
+  fill: #ccc;
+}
+#chart-local line {
+  stroke: #ccc;
+}
+#chart-local circle {
+  fill: #ccc;
+  stroke: #ccc;
+}
+
+
+
+
+
+
+
+
+
+
+/*******************************************************************************
+ =JavaScript
+*******************************************************************************/
+.listener {
+/*
+  fill: rgba(102,0,0,.1);
+/**/
+  cursor: pointer;
+}
+.label path {
+  stroke: #900;
+  fill: #900;
+  stroke-width: 2;
+}
+.label text {
+  fill: #fff;
+  font-size: 12px;
+  dominant-baseline: hanging;
+  text-anchor: middle;
+}
+[id^="labelUS_"] path {
+  stroke: #069;
+  fill: #069;
+}

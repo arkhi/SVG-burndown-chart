@@ -1,0 +1,14 @@
+The PHP could of course use classes and the like, this is far from clean.
+
+All variables are defined in the $sprint array.
+* number:         number of the current sprint (could be called sprintID);
+* days:           amount of days in the sprint;
+* points:         total number of points for Tasks commited to during the sprint;
+* USPoints:       total number of points for User Stories in the sprint;
+* dailyPoints:    array to be updated daily, based on the number of tasks points burned in the previous day;
+* dailyUSPoints:  array to be updated daily, based on the number of points for User Stories finished the previous day;
+* dailyBugs:      array to be updated daily, based on the time spent on bugs during the previous day.
+
+Two projections are displaying the following:
+* a global projection: sprint status based on the average points burned since the start of the sprint;
+* a local projection:  sprint status based on the points burned during the last day.
