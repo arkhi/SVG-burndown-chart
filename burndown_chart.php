@@ -15,7 +15,6 @@
   /*
    * Some data you'd like to change and update daily (dailyPoints & dailyUSPoints)
    * numbers in parentheses are added hours to the sprint
-   * 20120517: #17000; Sam and Sylvain already finished 4 hours on day 0
    *
    */
   $sprint = array(
@@ -29,23 +28,23 @@
      *
      */
     'dailyPoints'   => array(
-                              1+3+5+1,
-                              1+5+2,
-                              6+6+6+6
+                              1+3+5+1,  // day 1
+                              1+5+2,    // day 2
+                              6+6+6+6   // day 3
                             ),
     'dailyUSPoints' => array(
-                              0,
-                              1,
-                              3+5
+                              0,    // day 1
+                              1,    // day 2
+                              3+5   // day 3
                             ),
     /*
      * 2012
      *
      */
     'dailyBugs' => array(
-                          1+2+3,
-                          5+5+5,
-                          2
+                          1+2+3,  // day 1
+                          5+5+5,  // day2
+                          2       // day 3
                         )
   );
 
