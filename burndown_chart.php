@@ -1,8 +1,7 @@
 <?php
-/* You don't want that when you embed the file direclty in the HTML.
-   The 3 following lines should be commented when the files is direclty embedded in a HTML5 document.
-   On the contrary, the 3 following lines shouldn't be commented if this php file is used as a standalone
-   Just add [starSlash] caracters at the end of this line.
+/* The 3 following lines should be commented when the files is direclty embedded in a HTML5 document.
+   On the contrary, the 3 following lines shouldn't be commented if this php file is used as standalone
+   Just add [starSlash] caracters at the end of this line for standalone use. */
   header("Content-type: image/svg+xml");
   echo '<?xml version="1.0" encoding="utf-8"?>
   <?xml-stylesheet href="../../common_v2.css" type="text/css"?>';
@@ -34,7 +33,8 @@
   $GraphMargin    = 150;
   $unitPoint      = $graphHeight / $sprint['points'];
   $unitDay        = $graphWidth / $sprint['days'];
-  $coordsModifier = $sprint['points'] - $sprint['USPoints']; /* to adapt the number of US points to the scale of tasks points */
+  $coordsModifier = $sprint['points'] - $sprint['USPoints'];  /* to adapt the number of US points to the scale of tasks points */
+  $bugsModifier   = 1;                                        /* so that the bug chart is not too tiny compared to the rest */
 
   $arrayTasksCoords = array();
   $arrayUSCoords = array();
@@ -114,6 +114,7 @@
     <text x="<?= $graphWidth - 12; ?>" y="35">Sprint <?= $sprint['number']; ?></text>
     <text class="tasksPoints" x="<?= $graphWidth - 12; ?>" y="<?= 70; ?>">Tasks: <?= $sprint['points']; ?></text>
     <text class="USPoints" x="<?= $graphWidth - 12; ?>" y="<?= 105; ?>">User Story: <?= $sprint['USPoints'] ?></text>
+    <text class="bugPoints" x="<?= $graphWidth - 12; ?>" y="<?= 140; ?>">Bug Fixing Time: <?= array_sum($sprint['dailyBugs']) ?></text>
   </g><!-- /#legends -->
 
 
@@ -141,8 +142,6 @@
     <text x="12" y="<?= $coordsModifier * $unitPoint -12; ?>"><?= $sprint['USPoints']; ?></text>
   </g><!-- /#chart-us -->
 
-
-############################WE ARE HERE##################
 
 
   <g id="chart-tasks" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
@@ -175,7 +174,7 @@
   <?php
     $dailyBugs  = $sprint['dailyBugs'][$i];
     $xBugs      = $i * $unitDay + $unitDay;
-    $yBugs      = $graphHeight - $dailyBugs * $unitPoint;
+    $yBugs      = $graphHeight - $dailyBugs * $unitPoint * $bugsModifier;
     $arrayBugsCoords[$i] = $xBugs .', '. $yBugs;
   ?>
     <text x="<?= $xBugs + 12; ?>" y="<?= $yBugs + 12; ?>"><?= $sprint['dailyBugs'][$i]; ?></text>
