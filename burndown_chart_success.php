@@ -5,7 +5,7 @@
    Just add [starSlash] caracters at the end of this line. */
   header("Content-type: image/svg+xml");
   echo '<?xml version="1.0" encoding="utf-8"?>
-  <?xml-stylesheet href="../../common_v2.css" type="text/css"?>';
+  <?xml-stylesheet href="common.css" type="text/css"?>';
 /**/
 
   /*
@@ -13,34 +13,8 @@
    */
   $variation = isset($_GET['var']) ? $_GET['var'] : 12;
 
-  /*
-   * Some data you'd like to change and update daily (dailyPoints & dailyUSPoints)
-   * numbers in parentheses are added hours to the sprint
-   * 20120517: #17000; Sam and Sylvain already finished 4 hours on day 0
-   *
-   */
-  $sprint = array(
-    'number'        => 35,
-    'days'          => 22,
-    'points'        => 58+47+6+78+12,
-    'USPoints'      => 13+20+1+13+3,
-
-    /*
-     * 2012
-     *
-     * Baohua was off on day 10
-     */
-    'dailyPoints'   => array(
-                      ),
-    'dailyUSPoints' => array(
-                       ),
-    /*
-     * 2012
-     *
-     */
-    'dailyBugs' => array(
-                   )
-  );
+  /* Don't embed data in this file to allow more flexibility */
+  require('data.php');
 
   $graphWidth     = 2000;
   $graphHeight    = 1000;

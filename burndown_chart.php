@@ -4,7 +4,7 @@
    Just add [starSlash] caracters at the end of this line for standalone use. */
   header("Content-type: image/svg+xml");
   echo '<?xml version="1.0" encoding="utf-8"?>
-  <?xml-stylesheet href="../../common_v2.css" type="text/css"?>';
+  <?xml-stylesheet href="common.css" type="text/css"?>';
 /**/
 
   /*
@@ -12,21 +12,8 @@
    */
   $variation = isset($_GET['var']) ? $_GET['var'] : 12;
 
-  /*
-   * Some data you'd like to change and update daily (dailyPoints & dailyUSPoints)
-   */
-  $sprint = array(
-    'number'        => 31,
-    'days'          => 15,
-    'points'        => 346,
-    'USPoints'      => 87,
-    'dailyPoints'   => array(
-                            ),
-    'dailyUSPoints' => array(
-                            ),
-    'dailyBugs' => array(
-                        )
-  );
+  /* Don't embed data in this file to allow more flexibility */
+  require('data.php');
 
   $graphWidth     = 2000;
   $graphHeight    = 1000;
