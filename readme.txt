@@ -20,6 +20,7 @@ A few key principles when working with it.
   you can remove things related to User Story points;
 * If the sprint is unusualy long, the legends might not look really good.
   You can add the class ".long_sprint" to the "#grid" element.
+* Since you might have multiple sprints, you can move "common.css" to an other folder and refer to it accordingly
 
 
 
