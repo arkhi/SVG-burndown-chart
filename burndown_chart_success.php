@@ -16,6 +16,9 @@
   /* Don't embed data in this file to allow more flexibility */
   require('data.php');
 
+  $sprint['points']   = array_sum($sprint['dailyPoints']);
+  $sprint['USPoints'] = array_sum($sprint['dailyUSPoints']);
+
   $graphWidth     = 2000;
   $graphHeight    = 1000;
   $GraphMargin    = 150;
@@ -64,7 +67,7 @@
   </defs>
 
 
-  <g id="grid" class="long_sprint" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
+  <g id="grid" transform="translate(<?= $GraphMargin. ',' .$GraphMargin; ?>)">
     <rect id="graphFrame" x="0" y="0" width="<?= $graphWidth; ?>" height="<?= $graphHeight; ?>" />
 
     <g id="ordinate">
@@ -370,36 +373,6 @@
     }
 
     label.init();
-  ]]>
-  </script>
-
-  <script type="text/javascript">
-  <![CDATA[
-    console.log(''
-      +'\n GraphMargin: '+ <?= $GraphMargin; ?>
-      +'\n unitDay: '+ <?= $unitDay; ?>
-      +'\n ---'
-      +'\n x: '+ <?= $x; ?>
-      +'\n y: '+ <?= $y; ?>
-      +'\n previousX: '+ <?= $previousX; ?>
-      +'\n previousY: '+ <?= $previousY; ?>
-      +'\n burnedPoints: '+ <?= $burnedPoints; ?>
-      +'\n ---'
-      +'\n globalSlope: '+ <?= $globalSlope; ?>
-      +'\n globalX: '+ <?= $globalX; ?>
-      +'\n globalY: '+ <?= $globalY; ?>
-      +'\n globalDiff: '+ <?= $globalDiff; ?>
-      +'\n globalDiffAbs: '+ <?= $globalDiffAbs; ?>
-      +'\n ---'
-      +'\n globalRed: <?= $globalRed; ?>'
-      +'\n globalGreen: <?= $globalGreen; ?>'
-      +'\n globalColor: <?= $globalColor; ?>'
-      +'\n ---'
-      +'\n localSlope: '+ <?= $localSlope; ?>
-      +'\n localX: '+ <?= $localX; ?>
-      +'\n localY: '+ <?= $localY; ?>
-      +'\n localDiff: '+ <?= $localDiff; ?>
-    );
   ]]>
   </script>
 </svg>

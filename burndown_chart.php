@@ -1,7 +1,8 @@
 <?php
-/* The 3 following lines should be commented when the files is direclty embedded in a HTML5 document.
-   On the contrary, the 3 following lines shouldn't be commented if this php file is used as standalone
-   Just add [starSlash] caracters at the end of this line for standalone use. */
+/* You don't want that when you embed the file direclty in the HTML.
+   The 3 following lines should be commented when the files is direclty embedded in a HTML5 document.
+   On the contrary, the 3 following lines shouldn't be commented if this php file is used as a standalone
+   Just add [starSlash] caracters at the end of this line. */
   header("Content-type: image/svg+xml");
   echo '<?xml version="1.0" encoding="utf-8"?>
   <?xml-stylesheet href="common.css" type="text/css"?>';
