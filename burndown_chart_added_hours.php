@@ -22,7 +22,7 @@
   $unitPoint      = $graphHeight / $sprint['points'];
   $unitDay        = $graphWidth / $sprint['days'];
   $coordsModifier = $sprint['points'] - $sprint['USPoints'];  /* to adapt the number of US points to the scale of tasks points */
-  $bugsModifier   = 2;                                        /* so that the bug chart is not too tiny compared to the rest */
+  $bugsModifier   = 2;                                        /* so that the chart is not too tiny compared to the rest */
 
   $arrayTasksCoords = array();
   $arrayUSCoords = array();
@@ -139,7 +139,7 @@
     $previousX    = ($i-1) * $unitDay + $unitDay;
     $previousY    = $burnedPoints * $unitPoint;
 
-    $burnedPoints += $sprint['dailyPoints'][$i];
+    $burnedPoints += $sprint['dailyPoints'][$i] + $sprint['dailyBugs'][$i];
     $xTasks       = $i * $unitDay + $unitDay;
     $yTasks       = $burnedPoints * $unitPoint;
     $arrayTasksCoords[$i] = $xTasks .','. $yTasks;
@@ -370,36 +370,6 @@
     }
 
     label.init();
-  ]]>
-  </script>
-
-  <script type="text/javascript">
-  <![CDATA[
-    console.log(''
-      +'\n GraphMargin: '+ <?= $GraphMargin; ?>
-      +'\n unitDay: '+ <?= $unitDay; ?>
-      +'\n ---'
-      +'\n x: '+ <?= $x; ?>
-      +'\n y: '+ <?= $y; ?>
-      +'\n previousX: '+ <?= $previousX; ?>
-      +'\n previousY: '+ <?= $previousY; ?>
-      +'\n burnedPoints: '+ <?= $burnedPoints; ?>
-      +'\n ---'
-      +'\n globalSlope: '+ <?= $globalSlope; ?>
-      +'\n globalX: '+ <?= $globalX; ?>
-      +'\n globalY: '+ <?= $globalY; ?>
-      +'\n globalDiff: '+ <?= $globalDiff; ?>
-      +'\n globalDiffAbs: '+ <?= $globalDiffAbs; ?>
-      +'\n ---'
-      +'\n globalRed: <?= $globalRed; ?>'
-      +'\n globalGreen: <?= $globalGreen; ?>'
-      +'\n globalColor: <?= $globalColor; ?>'
-      +'\n ---'
-      +'\n localSlope: '+ <?= $localSlope; ?>
-      +'\n localX: '+ <?= $localX; ?>
-      +'\n localY: '+ <?= $localY; ?>
-      +'\n localDiff: '+ <?= $localDiff; ?>
-    );
   ]]>
   </script>
 </svg>

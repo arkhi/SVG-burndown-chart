@@ -16,13 +16,16 @@
   /* Don't embed data in this file to allow more flexibility */
   require('data.php');
 
+  $sprint['points']   = array_sum($sprint['dailyPoints']);
+  $sprint['USPoints'] = array_sum($sprint['dailyUSPoints']);
+
   $graphWidth     = 2000;
   $graphHeight    = 1000;
   $GraphMargin    = 150;
   $unitPoint      = $graphHeight / $sprint['points'];
   $unitDay        = $graphWidth / $sprint['days'];
   $coordsModifier = $sprint['points'] - $sprint['USPoints'];  /* to adapt the number of US points to the scale of tasks points */
-  $bugsModifier   = 2;                                        /* so that the bug chart is not too tiny compared to the rest */
+  $bugsModifier   = 1;                                        /* so that the chart is not too tiny compared to the rest */
 
   $arrayTasksCoords = array();
   $arrayUSCoords = array();
@@ -370,36 +373,6 @@
     }
 
     label.init();
-  ]]>
-  </script>
-
-  <script type="text/javascript">
-  <![CDATA[
-    console.log(''
-      +'\n GraphMargin: '+ <?= $GraphMargin; ?>
-      +'\n unitDay: '+ <?= $unitDay; ?>
-      +'\n ---'
-      +'\n x: '+ <?= $x; ?>
-      +'\n y: '+ <?= $y; ?>
-      +'\n previousX: '+ <?= $previousX; ?>
-      +'\n previousY: '+ <?= $previousY; ?>
-      +'\n burnedPoints: '+ <?= $burnedPoints; ?>
-      +'\n ---'
-      +'\n globalSlope: '+ <?= $globalSlope; ?>
-      +'\n globalX: '+ <?= $globalX; ?>
-      +'\n globalY: '+ <?= $globalY; ?>
-      +'\n globalDiff: '+ <?= $globalDiff; ?>
-      +'\n globalDiffAbs: '+ <?= $globalDiffAbs; ?>
-      +'\n ---'
-      +'\n globalRed: <?= $globalRed; ?>'
-      +'\n globalGreen: <?= $globalGreen; ?>'
-      +'\n globalColor: <?= $globalColor; ?>'
-      +'\n ---'
-      +'\n localSlope: '+ <?= $localSlope; ?>
-      +'\n localX: '+ <?= $localX; ?>
-      +'\n localY: '+ <?= $localY; ?>
-      +'\n localDiff: '+ <?= $localDiff; ?>
-    );
   ]]>
   </script>
 </svg>
