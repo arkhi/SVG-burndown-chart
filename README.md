@@ -4,7 +4,8 @@ The PHP could of course use classes and the like, this is far from clean.
 Feel free to improve by forking. :)
 
 
-# Usage
+Usage
+=====
 
 * Every day, you can update the file data.php to reflect points burned, User Story points removed and bugs fixing time;
 * If you don't want to differentiate points and User Story points, you can remove things related to User Story points;
@@ -13,7 +14,8 @@ Feel free to improve by forking. :)
 
 
 
-# Variables
+Variables
+=========
 
 All variables are defined in the $sprint array.
 * number:         number of the current sprint (could be called sprintID);
@@ -26,7 +28,8 @@ All variables are defined in the $sprint array.
 
 
 
-# Projections
+Projections
+===========
 
 Two projections are are available:
 * a global projection: sprint success estimation based on the average points burned since the start of the sprint;
@@ -34,7 +37,8 @@ Two projections are are available:
 
 
 
-# Alternate views
+Alternate views
+===============
 
 * "burndown_chart_success.php" shows the sprint as if it was successful.
 * "burndown_chart_added_hours.php" shows the cumulative hours spent on bug fixing and burned hours. This can explain how much work was globally done, even if the sprint is unsuccessful.
