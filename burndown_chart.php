@@ -11,10 +11,19 @@
   /*
    * $variation can be used to experiment and test through the URL.
    */
-  $variation = isset($_GET['var']) ? $_GET['var'] : 12;
+  $variation = isset($_GET['var'])      ? $_GET['var']            : 12;
+  $datapath  = isset($_GET['datapath']) ? $_GET['datapath'] . '/' : '';
+  $type      = isset($_GET['type'])     ? $_GET['type']           : '';
 
   /* Don't embed data in this file to allow more flexibility */
-  require('data.php');
+  require($datapath . 'data.php');
+  $bugsModifier   = 2; /* so that the bug chart is not too tiny compared to the rest */
+
+  if ('success' === $type) {
+    $sprint['points']   = array_sum($sprint['dailyPoints']);
+    $sprint['USPoints'] = array_sum($sprint['dailyUSPoints']);
+    $bugsModifier       = 1;
+  }
 
   $graphWidth     = 2000;
   $graphHeight    = 1000;
@@ -22,7 +31,6 @@
   $unitPoint      = $graphHeight / $sprint['points'];
   $unitDay        = $graphWidth / $sprint['days'];
   $coordsModifier = $sprint['points'] - $sprint['USPoints'];  /* to adapt the number of US points to the scale of tasks points */
-  $bugsModifier   = 2;                                        /* so that the bug chart is not too tiny compared to the rest */
 
   $arrayTasksCoords = array();
   $arrayUSCoords = array();
@@ -140,6 +148,10 @@
     $previousY    = $burnedPoints * $unitPoint;
 
     $burnedPoints += $sprint['dailyPoints'][$i];
+    if ('added_hours' === $type) {
+      $burnedPoints += $sprint['dailyBugs'][$i];
+    }
+
     $xTasks       = $i * $unitDay + $unitDay;
     $yTasks       = $burnedPoints * $unitPoint;
     $arrayTasksCoords[$i] = $xTasks .','. $yTasks;
