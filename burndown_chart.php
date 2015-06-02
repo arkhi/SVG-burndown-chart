@@ -71,7 +71,7 @@
   <?php for ($i = 0; $i < $sprint['points']; $i += 10) : /* horizontal lines: points */ ?>
       <line x1="0" y1="<?= $graphHeight - $i * $unitPoint; ?>" x2="<?= $graphWidth; ?>" y2="<?= $graphHeight - $i * $unitPoint; ?>" />
       <text x="-12" y="<?= $graphHeight - $i * $unitPoint; ?>"><?= $i; ?></text>
-  <? endfor; ?>
+  <?php endfor; ?>
       <text id="sprintTasksPoints" x="-12" y="-12"><?= $sprint['points']; ?></text>
     </g><!-- #ordinate -->
 
@@ -80,8 +80,8 @@
       <line x1="<?= $i * $unitDay; ?>" y1="0" x2="<?= $i * $unitDay; ?>" y2="<?= $graphHeight; ?>" />
   <?php if($i != 0) : ?>
       <text x="<?= $i * $unitDay; ?>" y="-12">day <?= $i; ?></text>
-  <? endif; ?>
-<? endfor; ?>
+  <?php endif; ?>
+<?php endfor; ?>
       <text x="<?= $graphWidth; ?>" y="-12">day <?= $sprint['days']; ?></text>
     </g><!-- #abscissa -->
 
@@ -89,7 +89,7 @@
       <line id="ideal_line" x1="0" y1="0" x2="<?= $graphWidth; ?>" y2="<?= $graphHeight; ?>" />
       <?php for ($i = 0; $i <= $sprint['days']; $i++) : /* ideal tasks remaining: dots */ ?>
       <circle cx="<?= $i * $unitDay; ?>" cy="<?= $i * $graphHeight / $sprint['days']; ?>" r="5" />
-      <? endfor; ?>
+      <?php endfor; ?>
     </g><!-- #ideal -->
   </g><!-- #grid -->
 
@@ -119,7 +119,7 @@
     $arrayUSCoords[$i] = $xUS .','. $yUS;
   ?>
     <text x="<?= $xUS + 12; ?>" y="<?= $yUS - 12; ?>"><?= $sprint['USPoints'] - $burnedPoints; ?></text>
-<? endfor; ?>
+<?php endfor; ?>
     <?php if(count($arrayUSCoords) == 0){$arrayUSCoords[0] = 0;} // If array is empty, set value to 0 ?>
 
     <polyline points="0,<?= $coordsModifier * $unitPoint; ?> <?= implode(' ', $arrayUSCoords); ?>"
@@ -145,7 +145,7 @@
     $arrayTasksCoords[$i] = $xTasks .','. $yTasks;
   ?>
     <text x="<?= $xTasks - 12; ?>" y="<?= $yTasks + 12; ?>"><?= $sprint['points'] - $burnedPoints; ?></text>
-<? endfor; ?>
+<?php endfor; ?>
     <?php if(count($arrayTasksCoords) == 0){$arrayTasksCoords[0] = 0;} // If array is empty, set value to 0 ?>
 
     <polyline points="0,0 <?= implode(' ', $arrayTasksCoords); ?>"
@@ -166,7 +166,7 @@
     $arrayBugsCoords[$i] = $xBugs .', '. $yBugs;
   ?>
     <text x="<?= $xBugs + 12; ?>" y="<?= $yBugs + 12; ?>"><?= $sprint['dailyBugs'][$i]; ?></text>
-<? endfor; ?>
+<?php endfor; ?>
     <?php if(count($arrayBugsCoords) == 0){$arrayBugsCoords[0] = 0;} // If array is empty, set value to 0 ?>
 
     <polyline points="0,<?= $graphHeight; ?> <?= implode(' ', $arrayBugsCoords); ?>"
@@ -269,7 +269,7 @@
               fill="#333"><?= $sprint['dailyUSPoints'][$i]; ?></text>
       </g>
     </g>
-<? endfor; ?>
+<?php endfor; ?>
   </g>
 
   <script type="text/javascript" xlink:href="label.js"></script>
