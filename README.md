@@ -1,3 +1,5 @@
+**This repository now lives in https://framagit.org/arkhi/svg-burndown-chart.**
+
 This project provides a fast "database free" way to update a burndown chart
 
 The PHP could of course use classes and the like, this is far from clean.
